@@ -22,7 +22,7 @@ class SignInRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const CompaniesPage(title: 'QAlenium SignIn Page'),
+      home: const SignInPage(title: 'QAlenium SignIn Page'),
     );
   }
 }
