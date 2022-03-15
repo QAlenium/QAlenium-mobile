@@ -70,7 +70,9 @@ class _SignInPageState extends State<SignInPage> {
                   children: <Widget>[
                     const Text('Fill in credentials'),
                     TextFormField(),
-                    TextFormField(),
+                    TextFormField(
+                      obscureText: true,
+                    ),
                     ElevatedButton(
                         child: const Text('Login'),
                         onPressed: () {
