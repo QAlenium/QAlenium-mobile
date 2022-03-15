@@ -26,7 +26,7 @@ class SplashRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const CompaniesPage(title: 'QAlenium Splash Page'),
+      home: const SplashPage(title: 'QAlenium Splash Page'),
     );
   }
 }
