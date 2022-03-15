@@ -44,7 +44,7 @@ dependencies:
   fl_chart: ^0.46.0
 
 flutter_native_splash:
-  color: "#222222"
+  color: "#001122"
 
 dev_dependencies:
   flutter_test:
