@@ -1,17 +1,17 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/home_route.dart';
-import 'package:qalenium_mobile/user_register_route.dart';
+import 'package:qalenium_mobile/companies_route.dart';
+import 'package:qalenium_mobile/signin_route.dart';
 
-class SignInRoute extends StatelessWidget {
-  const SignInRoute({Key? key}) : super(key: key);
+class UserSignupRoute extends StatelessWidget {
+  const UserSignupRoute({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SignIn',
+      title: 'Register User',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -24,13 +24,13 @@ class SignInRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SignInPage(title: 'SignIn Page'),
+      home: const UserSignupPage(title: 'Register User Page'),
     );
   }
 }
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key, required this.title}) : super(key: key);
+class UserSignupPage extends StatefulWidget {
+  const UserSignupPage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -44,10 +44,12 @@ class SignInPage extends StatefulWidget {
   final String title;
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<UserSignupPage> createState() => _UserSignupPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _UserSignupPageState extends State<UserSignupPage> {
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class _SignInPageState extends State<SignInPage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -69,32 +72,35 @@ class _SignInPageState extends State<SignInPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text('Fill in credentials'),
-                    TextFormField(),
+                    const Text('Fill in all user data'),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'email@provider.com'
+                      ),
+                    ),
                     TextFormField(
                       obscureText: true,
+                      decoration: const InputDecoration(
+                          hintText: 'password'
+                      ),
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          hintText: 'repeat password'
+                      ),
                     ),
                     ElevatedButton(
-                        child: const Text('Login'),
+                        child: const Text('Register'),
                         onPressed: () {
-                          // if success: go to home
-                          // if failed: toast notification
-
+                          // Validate if password matches, otherwise toastNotif
+                          // Validate if email already taken and toastNotificat
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const
-                              HomeRoute())
+                              SignInRoute())
                           );
-                        }
-                    ),
-                    ElevatedButton(
-                        child: const Text('Signup'),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const
-                              UserSignupRoute())
-                          );
+                          // Toast notification success
                         }
                     )
                   ],
