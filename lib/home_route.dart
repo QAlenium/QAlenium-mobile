@@ -1,16 +1,15 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/home_route.dart';
 
-class SignInRoute extends StatelessWidget {
-  const SignInRoute({Key? key}) : super(key: key);
+class HomeRoute extends StatelessWidget {
+  const HomeRoute({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SignIn',
+      title: 'Home',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -23,13 +22,13 @@ class SignInRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SignInPage(title: 'SignIn Page'),
+      home: const HomePage(title: 'Home Page'),
     );
   }
 }
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key, required this.title}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -43,11 +42,11 @@ class SignInPage extends StatefulWidget {
   final String title;
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
-
+class _HomePageState extends State<HomePage> {
+  
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -57,34 +56,19 @@ class _SignInPageState extends State<SignInPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-        ),
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+      ),
         body: Center(
           child: Form(
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text('Fill in credentials'),
-                    TextFormField(),
-                    TextFormField(),
-                    ElevatedButton(
-                        child: const Text('Login'),
-                        onPressed: () {
-                          // if success: go to home
-                          // if failed: toast notification
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const
-                              HomeRoute())
-                          );
-                        }
-                    )
-                  ],
+                  children: const <Widget>[
+                    Text('Home page'),
+                  ]
                 ),
               )),
         )
