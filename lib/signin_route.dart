@@ -9,7 +9,7 @@ class SignInRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'QAlenium',
+      title: 'SignIn',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -22,7 +22,7 @@ class SignInRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SignInPage(title: 'QAlenium SignIn Page'),
+      home: const SignInPage(title: 'SignIn Page'),
     );
   }
 }
