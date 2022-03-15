@@ -2,21 +2,12 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:qalenium_mobile/companies_route.dart';
 
 Future main() async {
-  //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  //FlutterNativeSplash.remove();
-
-  WidgetsFlutterBinding.ensureInitialized();
-  await initialization(null);
-
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const SplashRoute());
-
-}
-
-Future initialization(BuildContext? context) async {
-  await Future.delayed(const Duration(seconds: 2));
 }
 
 class SplashRoute extends StatelessWidget {
@@ -26,7 +17,7 @@ class SplashRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'QAlenium',
+      title: 'Splash',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -39,7 +30,7 @@ class SplashRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SplashPage(title: 'QAlenium Splash Page'),
+      home: const SplashPage(title: 'Splash Page'),
     );
   }
 }
@@ -65,24 +56,32 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
 
   @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(
+        const Duration(seconds: 2),
+            () => {
+          // if no company found by device_id, go to CompaniesRoute
+          // if company was found by device_id, go to LoginRoute
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CompaniesRoute())
+          ),
+          FlutterNativeSplash.remove()
+        }
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Text(
-          'Splash Route'
-        ),
-      ),
-      body: const Text(
-        'Splash Route'
-      ),
-    );
+    return const Scaffold();
   }
 }
