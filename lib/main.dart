@@ -1,9 +1,22 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-void main() {
+Future main() async {
+  //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  //FlutterNativeSplash.remove();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await initialization(null);
+
   runApp(const SplashRoute());
+
+}
+
+Future initialization(BuildContext? context) async {
+  await Future.delayed(const Duration(seconds: 2));
 }
 
 class SplashRoute extends StatelessWidget {
