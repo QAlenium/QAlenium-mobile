@@ -79,11 +79,17 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                     ElevatedButton(
                         child: const Text('Submit'),
                         onPressed: () async {
-                          // validate valid name
-                          // validate empty fields
-
-                          // if name already exists in database, throw message
-                          // if name is unique, then go to companies list page
+                          if (companyNameTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Company name must not be '
+                                        'empty'),
+                                  );
+                                });
+                            return;
+                          }
 
                           final response = await http
                               .post(Uri.parse('https://qalenium-api.herokuapp.com/company/createCompany'),
