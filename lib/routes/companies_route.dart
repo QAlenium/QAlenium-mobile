@@ -117,7 +117,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
-          itemCount: 2,
+          itemCount: companies.length,
           itemBuilder: (context, index) {
             return GestureDetector(
                 onTap: () => {

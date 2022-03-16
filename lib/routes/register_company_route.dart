@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/routes/companies_route.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterCompanyRoute extends StatelessWidget {
   const RegisterCompanyRoute({Key? key}) : super(key: key);
@@ -46,6 +49,8 @@ class RegisterCompanyPage extends StatefulWidget {
 
 class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
+  final companyNameTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -68,19 +73,58 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const Text('Fill in the company name'),
-                    TextFormField(),
+                    TextFormField(
+                      controller: companyNameTextController,
+                    ),
                     ElevatedButton(
                         child: const Text('Submit'),
-                        onPressed: () {
+                        onPressed: () async {
+                          // validate valid name
+                          // validate empty fields
+
                           // if name already exists in database, throw message
                           // if name is unique, then go to companies list page
 
-                          // Show toast notification anyways
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const
-                              CompaniesRoute())
+                          final response = await http
+                              .post(Uri.parse('https://qalenium-api.herokuapp.com/company/createCompany'),
+                            headers: <String, String> {
+                              'Content-Type':'application/json; charset=UTF-8',
+                            },
+                            body: jsonEncode(<String, String>{
+                              'name': companyNameTextController.text,
+                              'logo': 'Mf75dn64s67Hxv2xsi92LHG9EK6K2Fgfdig2jy',
+                              'flavourColor': '#000000',
+                              'loginGit': "false",
+                              'loginApple': "false",
+                              'loginFacebook': "false",
+                              'loginEmail': "true"
+                            }),
                           );
+
+                          if (response.statusCode == 200) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Company Registered '
+                                        'successfully'),
+                                  );
+                                });
+
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => const
+                                CompaniesRoute())
+                            );
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(response.body),
+                                  );
+                                });
+                          }
                         }
                     )
                   ],

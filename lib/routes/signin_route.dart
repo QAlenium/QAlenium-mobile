@@ -89,8 +89,9 @@ class _SignInPageState extends State<SignInPage> {
                     ElevatedButton(
                         child: const Text('Login'),
                         onPressed: () async {
-                          // if success: go to home
-                          // if failed: toast notification
+                          // validate valid email before api call
+                          // validate empty fields
+                          // validate few characters fields
 
                           final response = await http
                               .post(Uri.parse('https://qalenium-api.herokuapp'
