@@ -1,8 +1,11 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/register_company_route.dart';
-import 'package:qalenium_mobile/signin_route.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:qalenium_mobile/signin_route.dart';
 
 import 'models/company.dart';
 
@@ -51,7 +54,7 @@ class CompaniesPage extends StatefulWidget {
 
 class _CompaniesPageState extends State<CompaniesPage> {
 
-  late List<Company> companies;
+  List<Company> companies = [];
 
   void _goToRegisterCompanyPage() {
     Navigator.push(
@@ -60,8 +63,9 @@ class _CompaniesPageState extends State<CompaniesPage> {
     );
   }
 
-  Future<void> callCompaniesApi() async {
-    final response = await http.get(Uri.parse('https://qalenium-api.herokuapp.com/company/getcompanylist'));
+  void callCompaniesApi() async {
+    http.Response response = await http.get(Uri.parse('https://qalenium-api.herokuapp'
+        '.com/company/getcompanylist'));
 
     if (response.statusCode != 200) {
       showDialog(
@@ -73,12 +77,16 @@ class _CompaniesPageState extends State<CompaniesPage> {
             );
           });
     } else {
-      companies = (response.body as List<Company>);
+      setState(() {
+        List<dynamic> listCompanies = jsonDecode(response.body);
+        companies = listCompanies.map((company) => Company.companyFromJson
+          (company)).toList();
+      });
     }
   }
 
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
     callCompaniesApi();
   }
@@ -104,24 +112,25 @@ class _CompaniesPageState extends State<CompaniesPage> {
           ),
         ),
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: List.generate(companies.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignInRoute())
-              );
-            },
-            child: Text(
-              companies[index].name,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-          );
-        }),
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: Center(
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+          ),
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+                onTap: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SignInRoute()))
+                },
+                child: Card(
+                  child: Text(companies[index].name),
+                )
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _goToRegisterCompanyPage,

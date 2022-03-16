@@ -1,7 +1,7 @@
 import 'package:qalenium_mobile/models/company.dart';
 
 class User {
-  final String userId;
+  final int userId;
   final String deviceId;
   final String email;
   final String auth;

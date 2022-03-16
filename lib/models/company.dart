@@ -1,5 +1,5 @@
 class Company {
-  final String companyId;
+  final int companyId;
   final String name;
   final String logo;
   final String flavourColor;
