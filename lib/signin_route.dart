@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/home_route.dart';
 import 'package:qalenium_mobile/user_register_route.dart';
 
+import 'package:http/http.dart' as http;
+import 'models/user.dart';
+import 'dart:convert';
+
 class SignInRoute extends StatelessWidget {
   const SignInRoute({Key? key}) : super(key: key);
 
@@ -49,6 +53,14 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
 
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -70,21 +82,46 @@ class _SignInPageState extends State<SignInPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const Text('Fill in credentials'),
-                    TextFormField(),
+                    TextFormField(
+                      controller: emailTextController,
+                    ),
                     TextFormField(
                       obscureText: true,
+                      controller: passwordTextController,
                     ),
                     ElevatedButton(
                         child: const Text('Login'),
-                        onPressed: () {
+                        onPressed: () async {
                           // if success: go to home
                           // if failed: toast notification
 
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const
-                              HomeRoute())
+                          final response = await http
+                              .post(Uri.parse('https://qalenium-api.herokuapp'
+                              '.com/user/signin'),
+                            headers: <String, String> {
+                              'Content-Type':'application/json; charset=UTF-8',
+                            },
+                            body: jsonEncode(<String, String>{
+                              'email': emailTextController.text,
+                              'auth': passwordTextController.text
+                            }),
                           );
+
+                          if (response.statusCode == 200) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const
+                                HomeRoute())
+                            );
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(response.body),
+                                  );
+                                });
+                          }
                         }
                     ),
                     ElevatedButton(
