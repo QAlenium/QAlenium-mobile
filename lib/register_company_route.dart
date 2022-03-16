@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/companies_route.dart';
-import 'package:qalenium_mobile/signin_route.dart';
 
 class RegisterCompanyRoute extends StatelessWidget {
   const RegisterCompanyRoute({Key? key}) : super(key: key);
@@ -48,8 +45,6 @@ class RegisterCompanyPage extends StatefulWidget {
 }
 
 class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

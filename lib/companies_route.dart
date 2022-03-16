@@ -1,8 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/register_company_route.dart';
 import 'package:qalenium_mobile/signin_route.dart';
+
+import 'package:http/http.dart' as http;
+
+import 'models/company.dart';
 
 class CompaniesRoute extends StatelessWidget {
   const CompaniesRoute({Key? key}) : super(key: key);
@@ -49,11 +51,36 @@ class CompaniesPage extends StatefulWidget {
 
 class _CompaniesPageState extends State<CompaniesPage> {
 
+  late List<Company> companies;
+
   void _goToRegisterCompanyPage() {
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const RegisterCompanyRoute())
     );
+  }
+
+  Future<void> callCompaniesApi() async {
+    final response = await http.get(Uri.parse('https://qalenium-api.herokuapp.com/company/getcompanylist'));
+
+    if (response.statusCode != 200) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              content: Text('Something went wrong. Please try again in a few '
+                  'moments.'),
+            );
+          });
+    } else {
+      companies = (response.body as List<Company>);
+    }
+  }
+
+  @override
+  Future<void> initState() async {
+    super.initState();
+    callCompaniesApi();
   }
 
   @override
@@ -73,13 +100,13 @@ class _CompaniesPageState extends State<CompaniesPage> {
           cursorColor: Colors.white,
           maxLines: 1,
           decoration: InputDecoration(
-            hintText: "Type company here"
+              hintText: "Type company here"
           ),
         ),
       ),
       body: GridView.count(
         crossAxisCount: 2,
-        children: List.generate(20, (index) {
+        children: List.generate(companies.length, (index) {
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -88,7 +115,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
               );
             },
             child: Text(
-              '$index',
+              companies[index].name,
               style: Theme.of(context).textTheme.headline5,
             ),
           );

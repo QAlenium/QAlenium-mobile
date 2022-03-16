@@ -19,7 +19,7 @@ class Company {
     required this.loginEmail
   });
 
-  factory Company.fromJson(Map<String, dynamic> json) {
+  factory Company.companyFromJson(Map<String, dynamic> json) {
     return Company(
         companyId: json['companyId'],
         name: json['name'],
@@ -31,7 +31,6 @@ class Company {
         loginEmail: json['loginEmail']
     );
   }
-
 }
 
 
