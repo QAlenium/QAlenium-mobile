@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/signin_route.dart';
+import 'package:qalenium_mobile/routes/companies_route.dart';
 
-class UserSignupRoute extends StatelessWidget {
-  const UserSignupRoute({Key? key}) : super(key: key);
+class RegisterCompanyRoute extends StatelessWidget {
+  const RegisterCompanyRoute({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Register User',
+      title: 'Register Company',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -21,13 +21,13 @@ class UserSignupRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const UserSignupPage(title: 'Register User Page'),
+      home: const RegisterCompanyPage(title: 'Register Company Page'),
     );
   }
 }
 
-class UserSignupPage extends StatefulWidget {
-  const UserSignupPage({Key? key, required this.title}) : super(key: key);
+class RegisterCompanyPage extends StatefulWidget {
+  const RegisterCompanyPage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -41,10 +41,10 @@ class UserSignupPage extends StatefulWidget {
   final String title;
 
   @override
-  State<UserSignupPage> createState() => _UserSignupPageState();
+  State<RegisterCompanyPage> createState() => _RegisterCompanyPageState();
 }
 
-class _UserSignupPageState extends State<UserSignupPage> {
+class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -67,35 +67,20 @@ class _UserSignupPageState extends State<UserSignupPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text('Fill in all user data'),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'email@provider.com'
-                      ),
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          hintText: 'password'
-                      ),
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          hintText: 'repeat password'
-                      ),
-                    ),
+                    const Text('Fill in the company name'),
+                    TextFormField(),
                     ElevatedButton(
-                        child: const Text('Register'),
+                        child: const Text('Submit'),
                         onPressed: () {
-                          // Validate if password matches, otherwise toastNotif
-                          // Validate if email already taken and toastNotificat
+                          // if name already exists in database, throw message
+                          // if name is unique, then go to companies list page
+
+                          // Show toast notification anyways
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const
-                              SignInRoute())
+                              CompaniesRoute())
                           );
-                          // Toast notification success
                         }
                     )
                   ],
