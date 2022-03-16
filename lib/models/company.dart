@@ -16,7 +16,7 @@ class Company {
     required this.loginGit,
     required this.loginApple,
     required this.loginFacebook,
-    required this.loginEmail;
+    required this.loginEmail
   });
 
   factory Company.fromJson(Map<String, dynamic> json) {
