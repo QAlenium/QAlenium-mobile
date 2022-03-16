@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/register_company_route.dart';
+import 'package:qalenium_mobile/routes/register_company_route.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:qalenium_mobile/signin_route.dart';
+import 'package:qalenium_mobile/routes/signin_route.dart';
 
-import 'models/company.dart';
+import '../models/company.dart';
 
 class CompaniesRoute extends StatelessWidget {
   const CompaniesRoute({Key? key}) : super(key: key);
@@ -117,7 +117,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
-          itemCount: 2,
+          itemCount: companies.length,
           itemBuilder: (context, index) {
             return GestureDetector(
                 onTap: () => {

@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/home_route.dart';
-import 'package:qalenium_mobile/user_register_route.dart';
-
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class SignInRoute extends StatelessWidget {
-  const SignInRoute({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:qalenium_mobile/routes/companies_route.dart';
+import 'package:http/http.dart' as http;
+
+class RegisterCompanyRoute extends StatelessWidget {
+  const RegisterCompanyRoute({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SignIn',
+      title: 'Register Company',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -25,13 +24,13 @@ class SignInRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SignInPage(title: 'SignIn Page'),
+      home: const RegisterCompanyPage(title: 'Register Company Page'),
     );
   }
 }
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key, required this.title}) : super(key: key);
+class RegisterCompanyPage extends StatefulWidget {
+  const RegisterCompanyPage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -45,18 +44,12 @@ class SignInPage extends StatefulWidget {
   final String title;
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<RegisterCompanyPage> createState() => _RegisterCompanyPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
-  final emailTextController = TextEditingController();
-  final passwordTextController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final companyNameTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +59,7 @@ class _SignInPageState extends State<SignInPage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -78,37 +72,55 @@ class _SignInPageState extends State<SignInPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text('Fill in credentials'),
+                    const Text('Fill in the company name'),
                     TextFormField(
-                      controller: emailTextController,
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      controller: passwordTextController,
+                      controller: companyNameTextController,
                     ),
                     ElevatedButton(
-                        child: const Text('Login'),
+                        child: const Text('Submit'),
                         onPressed: () async {
-                          // if success: go to home
-                          // if failed: toast notification
+                          if (companyNameTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Company name must not be '
+                                        'empty'),
+                                  );
+                                });
+                            return;
+                          }
 
                           final response = await http
-                              .post(Uri.parse('https://qalenium-api.herokuapp'
-                              '.com/user/signin'),
+                              .post(Uri.parse('https://qalenium-api.herokuapp.com/company/createCompany'),
                             headers: <String, String> {
                               'Content-Type':'application/json; charset=UTF-8',
                             },
                             body: jsonEncode(<String, String>{
-                              'email': emailTextController.text,
-                              'auth': passwordTextController.text
+                              'name': companyNameTextController.text,
+                              'logo': 'Mf75dn64s67Hxv2xsi92LHG9EK6K2Fgfdig2jy',
+                              'flavourColor': '#000000',
+                              'loginGit': "false",
+                              'loginApple': "false",
+                              'loginFacebook': "false",
+                              'loginEmail': "true"
                             }),
                           );
 
                           if (response.statusCode == 200) {
-                            Navigator.push(
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Company Registered '
+                                        'successfully'),
+                                  );
+                                });
+
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(builder: (context) => const
-                                HomeRoute())
+                                CompaniesRoute())
                             );
                           } else {
                             showDialog(
@@ -119,16 +131,6 @@ class _SignInPageState extends State<SignInPage> {
                                   );
                                 });
                           }
-                        }
-                    ),
-                    ElevatedButton(
-                        child: const Text('Signup'),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const
-                              UserSignupRoute())
-                          );
                         }
                     )
                   ],

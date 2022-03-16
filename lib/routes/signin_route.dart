@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/signin_route.dart';
+import 'package:qalenium_mobile/routes/home_route.dart';
+import 'package:qalenium_mobile/routes/user_register_route.dart';
 
-class UserSignupRoute extends StatelessWidget {
-  const UserSignupRoute({Key? key}) : super(key: key);
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class SignInRoute extends StatelessWidget {
+  const SignInRoute({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Register User',
+      title: 'SignIn',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -21,13 +25,13 @@ class UserSignupRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const UserSignupPage(title: 'Register User Page'),
+      home: const SignInPage(title: 'SignIn Page'),
     );
   }
 }
 
-class UserSignupPage extends StatefulWidget {
-  const UserSignupPage({Key? key, required this.title}) : super(key: key);
+class SignInPage extends StatefulWidget {
+  const SignInPage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -41,10 +45,18 @@ class UserSignupPage extends StatefulWidget {
   final String title;
 
   @override
-  State<UserSignupPage> createState() => _UserSignupPageState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _UserSignupPageState extends State<UserSignupPage> {
+class _SignInPageState extends State<SignInPage> {
+
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +66,6 @@ class _UserSignupPageState extends State<UserSignupPage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -67,35 +78,58 @@ class _UserSignupPageState extends State<UserSignupPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text('Fill in all user data'),
+                    const Text('Fill in credentials'),
                     TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'email@provider.com'
-                      ),
+                      controller: emailTextController,
                     ),
                     TextFormField(
                       obscureText: true,
-                      decoration: const InputDecoration(
-                          hintText: 'password'
-                      ),
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          hintText: 'repeat password'
-                      ),
+                      controller: passwordTextController,
                     ),
                     ElevatedButton(
-                        child: const Text('Register'),
+                        child: const Text('Login'),
+                        onPressed: () async {
+                          // validate valid email before api call
+                          // validate empty fields
+                          // validate few characters fields
+
+                          final response = await http
+                              .post(Uri.parse('https://qalenium-api.herokuapp'
+                              '.com/user/signin'),
+                            headers: <String, String> {
+                              'Content-Type':'application/json; charset=UTF-8',
+                            },
+                            body: jsonEncode(<String, String>{
+                              'email': emailTextController.text,
+                              'auth': passwordTextController.text
+                            }),
+                          );
+
+                          if (response.statusCode == 200) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const
+                                HomeRoute())
+                            );
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(response.body),
+                                  );
+                                });
+                          }
+                        }
+                    ),
+                    ElevatedButton(
+                        child: const Text('Signup'),
                         onPressed: () {
-                          // Validate if password matches, otherwise toastNotif
-                          // Validate if email already taken and toastNotificat
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const
-                              SignInRoute())
+                              UserSignupRoute())
                           );
-                          // Toast notification success
                         }
                     )
                   ],
