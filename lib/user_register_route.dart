@@ -1,7 +1,4 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/companies_route.dart';
 import 'package:qalenium_mobile/signin_route.dart';
 
 class UserSignupRoute extends StatelessWidget {
@@ -48,8 +45,6 @@ class UserSignupPage extends StatefulWidget {
 }
 
 class _UserSignupPageState extends State<UserSignupPage> {
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
