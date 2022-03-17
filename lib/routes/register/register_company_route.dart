@@ -50,6 +50,10 @@ class RegisterCompanyPage extends StatefulWidget {
 class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
   final companyNameTextController = TextEditingController();
+  bool isLoginUsingGithubEnabled = false;
+  bool isLoginUsingAppleEnabled = false;
+  bool isLoginUsingFacebookEnabled = false;
+  bool isLoginUsingEmailEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +83,46 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           hintText: 'Type company name here'
                       ),
                     ),
+                    SwitchListTile(
+                        title: const Text('Login using GitHub'),
+                        secondary: const Icon(Icons.code),
+                        value: isLoginUsingGithubEnabled,
+                        onChanged: (value) {
+                          setState(() {
+                            isLoginUsingGithubEnabled = value;
+                          });
+                        }
+                    ),
+                    SwitchListTile(
+                        title: const Text('Login using Apple'),
+                        secondary: const Icon(Icons.apple),
+                        value: isLoginUsingAppleEnabled,
+                        onChanged: (value) {
+                          setState(() {
+                            isLoginUsingAppleEnabled = value;
+                          });
+                        }
+                    ),
+                    SwitchListTile(
+                        title: const Text('Login using Facebook'),
+                        secondary: const Icon(Icons.facebook),
+                        value: isLoginUsingFacebookEnabled,
+                        onChanged: (value) {
+                          setState(() {
+                            isLoginUsingFacebookEnabled = value;
+                          });
+                        }
+                    ),
+                    SwitchListTile(
+                        title: const Text('Login using Email'),
+                        secondary: const Icon(Icons.email),
+                        value: isLoginUsingEmailEnabled,
+                        onChanged: (value) {
+                          setState(() {
+                            isLoginUsingEmailEnabled = value;
+                          });
+                        }
+                    ),
                     ElevatedButton(
                         child: const Text('Submit'),
                         onPressed: () async {
@@ -103,10 +147,10 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                               'name': companyNameTextController.text,
                               'logo': 'Mf75dn64s67Hxv2xsi92LHG9EK6K2Fgfdig2jy',
                               'flavourColor': '#000000',
-                              'loginGit': "false",
-                              'loginApple': "false",
-                              'loginFacebook': "false",
-                              'loginEmail': "true"
+                              'loginGit': isLoginUsingGithubEnabled.toString(),
+                              'loginApple': isLoginUsingAppleEnabled.toString(),
+                              'loginFacebook': isLoginUsingFacebookEnabled.toString(),
+                              'loginEmail': isLoginUsingEmailEnabled.toString()
                             }),
                           );
 
