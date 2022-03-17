@@ -1,27 +1,25 @@
-import 'package:qalenium_mobile/models/company.dart';
-
 class User {
   final int userId;
+  final int companyId;
   final String deviceId;
   final String email;
   final String auth;
-  final Company company;
 
   const User({
     required this.userId,
+    required this.companyId,
     required this.deviceId,
     required this.email,
-    required this.auth,
-    required this.company
+    required this.auth
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
         userId: json['userId'],
+        companyId: json['companyId'],
         deviceId: json['deviceId'],
         email: json['email'],
-        auth: json['auth'],
-        company: json['company']
+        auth: json['auth']
     );
   }
 }

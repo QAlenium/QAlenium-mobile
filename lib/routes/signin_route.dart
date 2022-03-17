@@ -1,13 +1,17 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/routes/home_route.dart';
-import 'package:qalenium_mobile/routes/register/user_register_route.dart';
+import 'package:qalenium_mobile/routes/register/user_signup_route.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../models/company.dart';
+
 class SignInRoute extends StatelessWidget {
-  const SignInRoute({Key? key}) : super(key: key);
+  const SignInRoute({Key? key, required this.company}) : super(key: key);
+
+  final Company company;
 
   // This widget is the root of your application.
   @override
@@ -26,13 +30,14 @@ class SignInRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SignInPage(title: 'SignIn Page'),
+      home: SignInPage(title: 'SignIn Page', company: company),
     );
   }
 }
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key, required this.title}) : super(key: key);
+  const SignInPage({Key? key, required this.title, required this.company}) : super
+(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -43,6 +48,7 @@ class SignInPage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
+  final Company company;
   final String title;
 
   @override
@@ -50,7 +56,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
 
@@ -79,6 +84,7 @@ class _SignInPageState extends State<SignInPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    //TODO add company logo
                     const Text('Fill in credentials'),
                     TextFormField(
                       controller: emailTextController,
@@ -134,7 +140,7 @@ class _SignInPageState extends State<SignInPage> {
                             },
                             body: jsonEncode(<String, String>{
                               'email': emailTextController.text,
-                              'auth': passwordTextController.text
+                              'auth': passwordTextController.text,
                             }),
                           );
 
@@ -160,8 +166,8 @@ class _SignInPageState extends State<SignInPage> {
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const
-                              UserSignupRoute())
+                              MaterialPageRoute(builder: (context) =>
+                                  UserSignupRoute(company: widget.company))
                           );
                         }
                     )
