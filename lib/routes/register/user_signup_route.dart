@@ -5,13 +5,15 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:qalenium_mobile/models/company.dart';
 import 'package:qalenium_mobile/routes/signin_route.dart';
 
-import 'home_route.dart';
+import '../home_route.dart';
 
 class UserSignupRoute extends StatelessWidget {
-  const UserSignupRoute({Key? key}) : super(key: key);
+  const UserSignupRoute({Key? key, required this.company}) : super(key: key);
 
+  final Company company;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -29,13 +31,15 @@ class UserSignupRoute extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const UserSignupPage(title: 'Register User Page'),
+      home: UserSignupPage(title: 'Register User Page', company: company),
     );
   }
 }
 
 class UserSignupPage extends StatefulWidget {
-  const UserSignupPage({Key? key, required this.title}) : super(key: key);
+  const UserSignupPage({Key? key, required this.title, required this.company}) :
+        super(key:
+      key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -46,6 +50,7 @@ class UserSignupPage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
+  final Company company;
   final String title;
 
   @override
@@ -57,6 +62,11 @@ class _UserSignupPageState extends State<UserSignupPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final rePasswordTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,9 +182,9 @@ class _UserSignupPageState extends State<UserSignupPage> {
                             body: jsonEncode(<String, String>{
                               'email': emailTextController.text,
                               'auth': passwordTextController.text,
-                              'company': 'company X',
+                              'companyId': widget.company.companyId.toString(),
                               'deviceId': deviceUuid
-                            }),
+                            })
                           );
 
                           if (response.statusCode == 200) {
@@ -189,8 +199,8 @@ class _UserSignupPageState extends State<UserSignupPage> {
 
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const
-                                SignInRoute())
+                                MaterialPageRoute(builder: (context) =>
+                                    SignInRoute(company: widget.company))
                             );
                           } else {
                             showDialog(
