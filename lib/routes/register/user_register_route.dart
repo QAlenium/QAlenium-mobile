@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:qalenium_mobile/routes/signin_route.dart';
 
-import 'home_route.dart';
+import '../home_route.dart';
 
 class UserSignupRoute extends StatelessWidget {
   const UserSignupRoute({Key? key}) : super(key: key);

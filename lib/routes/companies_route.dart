@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/routes/register_company_route.dart';
+import 'package:qalenium_mobile/routes/register/register_company_route.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:qalenium_mobile/routes/signin_route.dart';

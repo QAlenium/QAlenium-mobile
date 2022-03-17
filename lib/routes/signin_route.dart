@@ -1,7 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/routes/home_route.dart';
-import 'package:qalenium_mobile/routes/user_register_route.dart';
+import 'package:qalenium_mobile/routes/register/user_register_route.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
