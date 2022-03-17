@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/routes/home_route.dart';
 import 'package:qalenium_mobile/routes/user_register_route.dart';
@@ -89,9 +90,41 @@ class _SignInPageState extends State<SignInPage> {
                     ElevatedButton(
                         child: const Text('Login'),
                         onPressed: () async {
-                          // validate valid email before api call
-                          // validate empty fields
-                          // validate few characters fields
+                          
+                          if (emailTextController.text.isEmpty ||
+                              passwordTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Fields must not be blank'),
+                                  );
+                                });
+                            return;
+                          }
+
+                          if (!EmailValidator.validate(emailTextController
+                              .text)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Invalid email'),
+                                  );
+                                });
+                            return;
+                          }
+
+                          if (passwordTextController.text.length <= 6) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Password is too short'),
+                                  );
+                                });
+                            return;
+                          }
 
                           final response = await http
                               .post(Uri.parse('https://qalenium-api.herokuapp'

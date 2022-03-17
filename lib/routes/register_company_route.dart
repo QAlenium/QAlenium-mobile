@@ -75,6 +75,9 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                     const Text('Fill in the company name'),
                     TextFormField(
                       controller: companyNameTextController,
+                      decoration: const InputDecoration(
+                          hintText: 'Type company name here'
+                      ),
                     ),
                     ElevatedButton(
                         child: const Text('Submit'),

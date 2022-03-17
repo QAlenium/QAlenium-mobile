@@ -1,5 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:qalenium_mobile/routes/signin_route.dart';
+
+import 'home_route.dart';
 
 class UserSignupRoute extends StatelessWidget {
   const UserSignupRoute({Key? key}) : super(key: key);
@@ -46,6 +54,10 @@ class UserSignupPage extends StatefulWidget {
 
 class _UserSignupPageState extends State<UserSignupPage> {
 
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final rePasswordTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -69,17 +81,20 @@ class _UserSignupPageState extends State<UserSignupPage> {
                   children: <Widget>[
                     const Text('Fill in all user data'),
                     TextFormField(
+                      controller: emailTextController,
                       decoration: const InputDecoration(
-                        hintText: 'email@provider.com'
+                          hintText: 'email@provider.com'
                       ),
                     ),
                     TextFormField(
+                      controller: passwordTextController,
                       obscureText: true,
                       decoration: const InputDecoration(
                           hintText: 'password'
                       ),
                     ),
                     TextFormField(
+                      controller: rePasswordTextController,
                       obscureText: true,
                       decoration: const InputDecoration(
                           hintText: 'repeat password'
@@ -87,15 +102,105 @@ class _UserSignupPageState extends State<UserSignupPage> {
                     ),
                     ElevatedButton(
                         child: const Text('Register'),
-                        onPressed: () {
-                          // Validate if password matches, otherwise toastNotif
-                          // Validate if email already taken and toastNotificat
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const
-                              SignInRoute())
+                        onPressed: () async {
+
+                          if (emailTextController.text.isEmpty ||
+                              passwordTextController.text.isEmpty ||
+                              rePasswordTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Fields must not be blank'),
+                                  );
+                                });
+                            return;
+                          }
+
+                          if (!EmailValidator.validate(emailTextController
+                              .text)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Invalid email'),
+                                  );
+                                });
+                            return;
+                          }
+
+                          if (passwordTextController.text !=
+                              rePasswordTextController.text) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Passwords doesn\'t match'),
+                                  );
+                                });
+                            return;
+                          }
+
+                          if (passwordTextController.text.length <= 6) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Password is too short'),
+                                  );
+                                });
+                            return;
+                          }
+
+                          DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                          String deviceUuid = "";
+
+                          if (Platform.isAndroid) {
+                            AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+                            deviceUuid = androidInfo.androidId!;
+                          } else if (Platform.isIOS) {
+                            IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+                            deviceUuid = iosInfo.identifierForVendor!;
+                          }
+
+                          final response = await http
+                              .post(Uri.parse('https://qalenium-api.herokuapp'
+                              '.com/user/signup'),
+                            headers: <String, String> {
+                              'Content-Type':'application/json; charset=UTF-8',
+                            },
+                            body: jsonEncode(<String, String>{
+                              'email': emailTextController.text,
+                              'auth': passwordTextController.text,
+                              'company': 'company X',
+                              'deviceId': deviceUuid
+                            }),
                           );
-                          // Toast notification success
+
+                          if (response.statusCode == 200) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('User registered '
+                                        'successfully'),
+                                  );
+                                });
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const
+                                SignInRoute())
+                            );
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(response.body),
+                                  );
+                                });
+                          }
                         }
                     )
                   ],
