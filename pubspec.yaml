@@ -42,6 +42,8 @@ dependencies:
   dart_code_metrics: ^4.12.0
   date_format: ^2.0.5
   fl_chart: ^0.46.0
+  email_validator: ^2.0.1
+  device_info_plus: ^3.2.2
 
 flutter_native_splash:
   color: "#001122"
