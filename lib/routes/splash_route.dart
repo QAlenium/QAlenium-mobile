@@ -66,7 +66,7 @@ class _SplashPageState extends State<SplashPage> {
     callInitApis();
   }
 
-  void callInitApis() async {
+  void callInitApis() {
 
     // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     // String deviceUuid = "";
@@ -121,12 +121,13 @@ class _SplashPageState extends State<SplashPage> {
     //       });
     // }
 
-    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CompaniesRoute())
-    );
-
-    FlutterNativeSplash.remove();
+    Future.delayed(Duration.zero, () async {
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CompaniesRoute())
+      );
+      FlutterNativeSplash.remove();
+    });
   }
 
   @override
