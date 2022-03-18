@@ -1,6 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:qalenium_mobile/routes/companies_route.dart';
+import 'package:http/http.dart' as http;
+
+import '../models/company.dart';
 
 Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -56,19 +63,70 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
+    callInitApis();
+  }
 
-    Future.delayed(
-        const Duration(seconds: 2),
-            () => {
-          // if no company found by device_id, go to CompaniesRoute
-          // if company was found by device_id, go to LoginRoute
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CompaniesRoute())
-          ),
-          FlutterNativeSplash.remove()
-        }
+  void callInitApis() async {
+
+    // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    // String deviceUuid = "";
+    //
+    // if (Platform.isAndroid) {
+    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    //   deviceUuid = androidInfo.androidId!;
+    // } else if (Platform.isIOS) {
+    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    //   deviceUuid = iosInfo.identifierForVendor!;
+    // }
+    //
+    // http.Response response = await http.get(Uri.parse('https://qalenium-api.herokuapp'
+    //     '.com/company/getCompanyByDeviceId/' + deviceUuid));
+    //
+    // if (response.statusCode == 200) {
+    //   List<dynamic> companiesDynamic = jsonDecode(response.body);
+    //   List<Company> companies = companiesDynamic.map((company) => Company
+    //       .companyFromJson(company)).toList();
+    //
+    //   if (companies.length > 1) {
+    //     //TODO redirect to a page that contains only the returned companies
+    //     //TODO plus a button to return to the companies list route
+    //     showDialog(
+    //         context: context,
+    //         builder: (context) {
+    //           return const AlertDialog(
+    //             content: Text('Device is associated to more than one company,'
+    //                 ' hence, redirecting to a page that contains only the '
+    //                 'associated companies'),
+    //           );
+    //         });
+    //     Navigator.push(
+    //         context,
+    //         MaterialPageRoute(builder: (context) => const CompaniesRoute())
+    //     );
+    //   } else {
+    //     Navigator.push(
+    //         context,
+    //         MaterialPageRoute(builder: (context) => const CompaniesRoute())
+    //     );
+    //   }
+    // } else {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return const AlertDialog(
+    //           content: Text('Something went wrong. Please try closing the app '
+    //               'and reopening it. If the error persist, contact the '
+    //               'administrator.'),
+    //         );
+    //       });
+    // }
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const CompaniesRoute())
     );
+
+    FlutterNativeSplash.remove();
   }
 
   @override
