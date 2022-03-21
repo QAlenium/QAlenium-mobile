@@ -1,3 +1,4 @@
+import 'package:crypto/crypto.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/routes/home_route.dart';
@@ -91,13 +92,14 @@ class _SignInPageState extends State<SignInPage> {
                       width: 100,
                       height: 100,
                     ),
-                    TextFormField(
-                      controller: emailTextController,
-                      textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                        hintText: 'Email',
+                    if (widget.company.loginEmail)
+                      TextFormField(
+                        controller: emailTextController,
+                        textAlign: TextAlign.center,
+                        decoration: const InputDecoration(
+                          hintText: 'Email',
+                        ),
                       ),
-                    ),
                     TextFormField(
                       obscureText: true,
                       controller: passwordTextController,
@@ -106,7 +108,7 @@ class _SignInPageState extends State<SignInPage> {
                         hintText: 'Password',
                       ),
                     ),
-                    if (widget.company.loginEmail) SizedBox(
+                    SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
                           icon: const Icon(Icons.email),
@@ -156,7 +158,9 @@ class _SignInPageState extends State<SignInPage> {
                               },
                               body: jsonEncode(<String, String>{
                                 'email': emailTextController.text,
-                                'auth': passwordTextController.text,
+                                'auth': sha512.convert(utf8.encode
+                                  (emailTextController.text + ':' +
+                                    passwordTextController.text)).toString(),
                               }),
                             );
 
@@ -227,14 +231,14 @@ class _SignInPageState extends State<SignInPage> {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.save_rounded),
-                          label: const Text('Signup'),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) =>
-                                    UserSignupRoute(company: widget.company))
-                            );
-                          },
+                        label: const Text('Signup'),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>
+                                  UserSignupRoute(company: widget.company))
+                          );
+                        },
                       ),
                     ),
                   ],
