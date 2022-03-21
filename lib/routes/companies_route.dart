@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as _img;
 import 'package:qalenium_mobile/routes/register/register_company_route.dart';
 
 import 'package:http/http.dart' as http;
@@ -126,7 +128,31 @@ class _CompaniesPageState extends State<CompaniesPage> {
                       MaterialPageRoute(builder: (context) => SignInRoute(company: companies[index])))
                 },
                 child: Card(
-                  child: Text(companies[index].name),
+                  //semanticContainer: true,
+                  //borderOnForeground: true,
+                    shadowColor: Colors.black,
+                    margin: const EdgeInsets.all(10),
+                    shape:  OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Colors.white)
+                    ),
+                    child: Container(
+                      alignment: Alignment.topLeft,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: companies[index].logo == '' ?
+                                Image.asset('assets/logo_company.png') :
+                                Image.memory(const Base64Decoder().convert
+                                  (companies[index].logo))
+                            ),
+                          ),
+                          Text(companies[index].name),
+                        ],
+                      ),
+                    )
                 )
             );
           },
