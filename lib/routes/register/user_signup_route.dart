@@ -89,7 +89,13 @@ class _UserSignupPageState extends State<UserSignupPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text('Fill in all user data'),
+                    Image.memory(
+                      const Base64Decoder().convert
+                        (widget.company.logo),
+                      semanticLabel: 'Company\'s logo',
+                      width: 100,
+                      height: 100,
+                    ),
                     TextFormField(
                       controller: emailTextController,
                       decoration: const InputDecoration(
