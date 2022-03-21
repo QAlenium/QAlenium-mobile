@@ -37,7 +37,7 @@ class SignInRoute extends StatelessWidget {
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key, required this.title, required this.company}) : super
-(key: key);
+      (key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -84,93 +84,159 @@ class _SignInPageState extends State<SignInPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    //TODO add company logo
-                    const Text('Fill in credentials'),
+                    Image.memory(
+                      const Base64Decoder().convert
+                        (widget.company.logo),
+                      semanticLabel: 'Company\'s logo',
+                      width: 100,
+                      height: 100,
+                    ),
                     TextFormField(
                       controller: emailTextController,
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(
+                        hintText: 'Email',
+                      ),
                     ),
                     TextFormField(
                       obscureText: true,
                       controller: passwordTextController,
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(
+                        hintText: 'Password',
+                      ),
                     ),
-                    ElevatedButton(
-                        child: const Text('Login'),
-                        onPressed: () async {
-                          
-                          if (emailTextController.text.isEmpty ||
-                              passwordTextController.text.isEmpty) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return const AlertDialog(
-                                    content: Text('Fields must not be blank'),
-                                  );
-                                });
-                            return;
+                    if (widget.company.loginEmail) SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                          icon: const Icon(Icons.email),
+                          label: const Text('Login'),
+                          onPressed: () async {
+
+                            if (emailTextController.text.isEmpty ||
+                                passwordTextController.text.isEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const AlertDialog(
+                                      content: Text('Fields must not be blank'),
+                                    );
+                                  });
+                              return;
+                            }
+
+                            if (!EmailValidator.validate(emailTextController
+                                .text)) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const AlertDialog(
+                                      content: Text('Invalid email'),
+                                    );
+                                  });
+                              return;
+                            }
+
+                            if (passwordTextController.text.length <= 6) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const AlertDialog(
+                                      content: Text('Password is too short'),
+                                    );
+                                  });
+                              return;
+                            }
+
+                            final response = await http
+                                .post(Uri.parse('https://qalenium-api.herokuapp'
+                                '.com/user/signin'),
+                              headers: <String, String> {
+                                'Content-Type':'application/json; charset=UTF-8',
+                              },
+                              body: jsonEncode(<String, String>{
+                                'email': emailTextController.text,
+                                'auth': passwordTextController.text,
+                              }),
+                            );
+
+                            if (response.statusCode == 200) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const
+                                  HomeRoute())
+                              );
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text(response.body),
+                                    );
+                                  });
+                            }
                           }
-
-                          if (!EmailValidator.validate(emailTextController
-                              .text)) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return const AlertDialog(
-                                    content: Text('Invalid email'),
-                                  );
-                                });
-                            return;
-                          }
-
-                          if (passwordTextController.text.length <= 6) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return const AlertDialog(
-                                    content: Text('Password is too short'),
-                                  );
-                                });
-                            return;
-                          }
-
-                          final response = await http
-                              .post(Uri.parse('https://qalenium-api.herokuapp'
-                              '.com/user/signin'),
-                            headers: <String, String> {
-                              'Content-Type':'application/json; charset=UTF-8',
-                            },
-                            body: jsonEncode(<String, String>{
-                              'email': emailTextController.text,
-                              'auth': passwordTextController.text,
-                            }),
-                          );
-
-                          if (response.statusCode == 200) {
+                      ),
+                    ), if (widget.company.loginFacebook) SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                          icon: const Icon(
+                              Icons.facebook
+                          ),
+                          label: const Text('Login Facebook'),
+                          onPressed: () {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const
-                                HomeRoute())
+                                MaterialPageRoute(builder: (context) =>
+                                    UserSignupRoute(company: widget.company))
                             );
-                          } else {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: Text(response.body),
-                                  );
-                                });
                           }
-                        }
+                      ),
+                    ), if (widget.company.loginApple) SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                          icon: const Icon(
+                              Icons.apple
+                          ),
+                          label: const Text('Login Apple'),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) =>
+                                    UserSignupRoute(company: widget.company))
+                            );
+                          }
+                      ),
+                    ), if (widget.company.loginGit) SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                          icon: const Icon(
+                              Icons.code
+                          ),
+                          label: const Text('Login Github'),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) =>
+                                    UserSignupRoute(company: widget.company))
+                            );
+                          }
+                      ),
                     ),
-                    ElevatedButton(
-                        child: const Text('Signup'),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>
-                                  UserSignupRoute(company: widget.company))
-                          );
-                        }
-                    )
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.save_rounded),
+                          label: const Text('Signup'),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) =>
+                                    UserSignupRoute(company: widget.company))
+                            );
+                          },
+                      ),
+                    ),
                   ],
                 ),
               )),
