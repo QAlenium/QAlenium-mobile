@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +120,7 @@ class _UserSignupPageState extends State<UserSignupPage> {
                     ElevatedButton(
                         child: const Text('Register'),
                         onPressed: () async {
-
+                          
                           if (emailTextController.text.isEmpty ||
                               passwordTextController.text.isEmpty ||
                               rePasswordTextController.text.isEmpty) {
@@ -187,7 +188,9 @@ class _UserSignupPageState extends State<UserSignupPage> {
                             },
                             body: jsonEncode(<String, String>{
                               'email': emailTextController.text,
-                              'auth': passwordTextController.text,
+                              'auth': sha512.convert(utf8.encode
+                                (emailTextController.text + ':' +
+                                  passwordTextController.text)).toString(),
                               'companyId': widget.company.companyId.toString(),
                               'deviceId': deviceUuid
                             })

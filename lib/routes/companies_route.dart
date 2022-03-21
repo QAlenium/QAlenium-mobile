@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image/image.dart' as _img;
 import 'package:qalenium_mobile/routes/register/register_company_route.dart';
 
 import 'package:http/http.dart' as http;
