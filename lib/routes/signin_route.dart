@@ -93,94 +93,99 @@ class _SignInPageState extends State<SignInPage> {
                       height: 100,
                     ),
                     if (widget.company.loginEmail)
-                      TextFormField(
-                        controller: emailTextController,
-                        textAlign: TextAlign.center,
-                        decoration: const InputDecoration(
-                          hintText: 'Email',
+                    Column(
+                      children: [
+                        TextFormField(
+                          controller: emailTextController,
+                          textAlign: TextAlign.center,
+                          decoration: const InputDecoration(
+                            hintText: 'Email',
+                          ),
                         ),
-                      ),
-                    TextFormField(
-                      obscureText: true,
-                      controller: passwordTextController,
-                      textAlign: TextAlign.center,
-                      decoration: const InputDecoration(
-                        hintText: 'Password',
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                          icon: const Icon(Icons.email),
-                          label: const Text('Login'),
-                          onPressed: () async {
+                        TextFormField(
+                          obscureText: true,
+                          controller: passwordTextController,
+                          textAlign: TextAlign.center,
+                          decoration: const InputDecoration(
+                            hintText: 'Password',
+                          ),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                              icon: const Icon(Icons.email),
+                              label: const Text('Login'),
+                              onPressed: () async {
 
-                            if (emailTextController.text.isEmpty ||
-                                passwordTextController.text.isEmpty) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return const AlertDialog(
-                                      content: Text('Fields must not be blank'),
-                                    );
-                                  });
-                              return;
-                            }
+                                if (emailTextController.text.isEmpty ||
+                                    passwordTextController.text.isEmpty) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return const AlertDialog(
+                                          content: Text('Fields must not be blank'),
+                                        );
+                                      });
+                                  return;
+                                }
 
-                            if (!EmailValidator.validate(emailTextController
-                                .text)) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return const AlertDialog(
-                                      content: Text('Invalid email'),
-                                    );
-                                  });
-                              return;
-                            }
+                                if (!EmailValidator.validate(emailTextController
+                                    .text)) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return const AlertDialog(
+                                          content: Text('Invalid email'),
+                                        );
+                                      });
+                                  return;
+                                }
 
-                            if (passwordTextController.text.length <= 6) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return const AlertDialog(
-                                      content: Text('Password is too short'),
-                                    );
-                                  });
-                              return;
-                            }
+                                if (passwordTextController.text.length <= 6) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return const AlertDialog(
+                                          content: Text('Password is too short'),
+                                        );
+                                      });
+                                  return;
+                                }
 
-                            final response = await http
-                                .post(Uri.parse('https://qalenium-api.herokuapp'
-                                '.com/user/signin'),
-                              headers: <String, String> {
-                                'Content-Type':'application/json; charset=UTF-8',
-                              },
-                              body: jsonEncode(<String, String>{
-                                'email': emailTextController.text,
-                                'auth': sha512.convert(utf8.encode
-                                  (emailTextController.text + ':' +
-                                    passwordTextController.text)).toString(),
-                              }),
-                            );
+                                final response = await http
+                                    .post(Uri.parse('https://qalenium-api.herokuapp'
+                                    '.com/user/signin'),
+                                  headers: <String, String> {
+                                    'Content-Type':'application/json; charset=UTF-8',
+                                  },
+                                  body: jsonEncode(<String, String>{
+                                    'email': emailTextController.text,
+                                    'auth': sha512.convert(utf8.encode
+                                      (emailTextController.text + ':' +
+                                        passwordTextController.text)).toString(),
+                                    'companyId':widget.company.companyId.toString()
+                                  }),
+                                );
 
-                            if (response.statusCode == 200) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const
-                                  HomeRoute())
-                              );
-                            } else {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: Text(response.body),
-                                    );
-                                  });
-                            }
-                          }
-                      ),
+                                if (response.statusCode == 200) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const
+                                      HomeRoute())
+                                  );
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Text(response.body),
+                                        );
+                                      });
+                                }
+                              }
+                          ),
+                        ),
+                      ],
                     ), if (widget.company.loginFacebook) SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
