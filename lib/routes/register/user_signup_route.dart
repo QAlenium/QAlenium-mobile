@@ -94,8 +94,7 @@ class _UserSignupPageState extends State<UserSignupPage> {
                       const Base64Decoder().convert
                         (widget.company.logo),
                       semanticLabel: 'Company\'s logo',
-                      width: 100,
-                      height: 100,
+                      alignment: Alignment.center,
                     ),
                     TextFormField(
                       controller: emailTextController,

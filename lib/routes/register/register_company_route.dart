@@ -104,8 +104,14 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
       return Semantics(
         label: 'image_picker_example_picked_image',
         child: kIsWeb
-            ? Image.network(_image.path)
-            : Image.file(File(_image.path)),
+            ? Image.network(
+          _image.path,
+          alignment: Alignment.center,
+        )
+            : Image.file(
+          File(_image.path),
+          alignment: Alignment.center,
+        ),
       );
     } else if (_pickImageError != null) {
       return Text(
