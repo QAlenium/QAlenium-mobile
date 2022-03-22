@@ -89,8 +89,7 @@ class _SignInPageState extends State<SignInPage> {
                       const Base64Decoder().convert
                         (widget.company.logo),
                       semanticLabel: 'Company\'s logo',
-                      width: 100,
-                      height: 100,
+                      alignment: Alignment.center,
                     ),
                     if (widget.company.loginEmail)
                     Column(

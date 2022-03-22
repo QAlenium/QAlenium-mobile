@@ -54,6 +54,7 @@ class CompaniesPage extends StatefulWidget {
 class _CompaniesPageState extends State<CompaniesPage> {
 
   List<Company> companies = [];
+  List<Company> _foundUsers = [];
 
   void _goToRegisterCompanyPage() {
     Navigator.push(
@@ -84,6 +85,22 @@ class _CompaniesPageState extends State<CompaniesPage> {
     }
   }
 
+  void _runFilter(String enteredKeyword) {
+    List<Company> results = [];
+    if (enteredKeyword.isEmpty) {
+      results = companies;
+    } else {
+      results = companies
+          .where((company) =>
+          company.name.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+      _foundUsers = results;
+    });
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -102,13 +119,16 @@ class _CompaniesPageState extends State<CompaniesPage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const TextField(
+        title: TextFormField(
           textAlign: TextAlign.center,
           cursorColor: Colors.white,
           maxLines: 1,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               hintText: "Type company here"
           ),
+          onChanged: (value) => {
+            _runFilter(value)
+          },
         ),
       ),
       body: Center(
@@ -116,7 +136,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
-          itemCount: companies.length,
+          itemCount: _foundUsers.length,
           itemBuilder: (context, index) {
             return GestureDetector(
                 onTap: () => {
@@ -141,13 +161,19 @@ class _CompaniesPageState extends State<CompaniesPage> {
                           Expanded(
                             child: Padding(
                                 padding: const EdgeInsets.all(20),
-                                child: companies[index].logo == '' ?
-                                Image.asset('assets/logo_company.png') :
-                                Image.memory(const Base64Decoder().convert
-                                  (companies[index].logo))
+                                child: _foundUsers[index].logo == '' ?
+                                Image.asset(
+                                  'assets/logo_company.png',
+                                  alignment: Alignment.center,
+                                ) :
+                                Image.memory(
+                                  const Base64Decoder().convert
+                                  (_foundUsers[index].logo),
+                                  alignment: Alignment.center,
+                                )
                             ),
                           ),
-                          Text(companies[index].name),
+                          Text(_foundUsers[index].name),
                         ],
                       ),
                     )
