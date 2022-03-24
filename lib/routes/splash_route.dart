@@ -1,13 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:qalenium_mobile/routes/companies_route.dart';
-import 'package:http/http.dart' as http;
-
-import '../models/company.dart';
 
 Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -23,25 +17,18 @@ class SplashRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Splash',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const SplashPage(title: 'Splash Page'),
+      theme: FlexColorScheme.light(scheme: FlexScheme.ebonyClay).toTheme,
+      darkTheme: FlexColorScheme.dark(scheme: FlexScheme.ebonyClay).toTheme,
+      themeMode: ThemeMode.system,
+      home: const SplashPage(title: 'Splash Page', theme: FlexScheme.ebonyClay),
     );
   }
 }
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key, required this.title}) : super(key: key);
+  const SplashPage({Key? key, required this.title, required this.theme}) : super
+(key:
+  key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -53,6 +40,7 @@ class SplashPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final FlexScheme theme;
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -124,7 +112,7 @@ class _SplashPageState extends State<SplashPage> {
     Future.delayed(Duration.zero, () async {
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const CompaniesRoute())
+          MaterialPageRoute(builder: (context) => CompaniesRoute(theme: widget.theme))
       );
       FlutterNativeSplash.remove();
     });

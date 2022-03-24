@@ -4,43 +4,35 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:qalenium_mobile/models/company.dart';
 import 'package:qalenium_mobile/routes/signin_route.dart';
 
-import '../home_route.dart';
-
 class UserSignupRoute extends StatelessWidget {
-  const UserSignupRoute({Key? key, required this.company}) : super(key: key);
+  const UserSignupRoute({Key? key, required this.company, required this
+      .theme}) : super(key: key);
 
   final Company company;
+  final FlexScheme theme;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Register User',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: UserSignupPage(title: 'Register User Page', company: company),
+      theme: FlexColorScheme.light(scheme: theme).toTheme,
+      darkTheme: FlexColorScheme.dark(scheme: theme).toTheme,
+      themeMode: ThemeMode.system,
+      home: UserSignupPage(title: 'Register User Page', company: company,
+          theme: theme),
     );
   }
 }
 
 class UserSignupPage extends StatefulWidget {
-  const UserSignupPage({Key? key, required this.title, required this.company}) :
-        super(key:
-      key);
+  const UserSignupPage({Key? key, required this.title, required this.company,
+    required this.theme}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -53,6 +45,7 @@ class UserSignupPage extends StatefulWidget {
 
   final Company company;
   final String title;
+  final FlexScheme theme;
 
   @override
   State<UserSignupPage> createState() => _UserSignupPageState();
@@ -208,7 +201,8 @@ class _UserSignupPageState extends State<UserSignupPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
-                                    SignInRoute(company: widget.company))
+                                    SignInRoute(company: widget.company,
+                                        theme: widget.theme))
                             );
                           } else {
                             showDialog(
