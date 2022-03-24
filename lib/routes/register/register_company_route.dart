@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 
+import 'package:crypto/crypto.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,8 @@ import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;
+
+import '../../models/company.dart';
 
 class RegisterCompanyRoute extends StatelessWidget {
   const RegisterCompanyRoute({Key? key, required this.theme}) : super(key: key);
@@ -52,20 +57,23 @@ class RegisterCompanyPage extends StatefulWidget {
 typedef OnPickImageCallback = void Function();
 
 class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
+
   final companyNameTextController = TextEditingController();
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final rePasswordTextController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
+  dynamic _pickImageError;
+  late XFile _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
   bool isLoginUsingGithubEnabled = false;
   bool isLoginUsingAppleEnabled = false;
   bool isLoginUsingFacebookEnabled = false;
   bool isLoginUsingEmailEnabled = false;
-
+  bool isAuthTogglesListExpanded = false;
+  bool isAdminSetupExpanded = false;
   int selectedRadio = 1;
-
-  late XFile _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
   String? _retrieveDataError;
-
-  dynamic _pickImageError;
 
   Future<File> getImageFileFromAssets(String path) async {
     final byteData = await rootBundle.load('assets/$path');
@@ -119,10 +127,14 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
             ? Image.network(
           _image.path,
           alignment: Alignment.center,
+          width: 100,
+          height: 100,
         )
-            : Image.asset(
-          'assets/qalenium_logo_white_background.png',
+            : Image.file(
+          File(_image.path),
           alignment: Alignment.center,
+          width: 100,
+          height: 100,
         ),
       );
     } else if (_pickImageError != null) {
@@ -271,12 +283,11 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
       body: Center(
         child: Form(
             child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+              padding: const EdgeInsets.all(30.0),
+              child: ListView(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(0),
                     child: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
                         ? FutureBuilder<void>(
                       //future: retrieveLostData(),
@@ -333,45 +344,115 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                       hintText: 'Type company name here',
                     ),
                   ),
-                  SwitchListTile(
-                      title: const Text('Login using GitHub'),
-                      secondary: const Icon(Icons.code),
-                      value: isLoginUsingGithubEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          isLoginUsingGithubEnabled = value;
-                        });
-                      }
+                  ExpansionPanelList(
+                    animationDuration: const Duration(milliseconds: 600),
+                    expansionCallback: (panelIndex, isExpanded) {
+                      isAuthTogglesListExpanded = !isAuthTogglesListExpanded;
+                      setState(() {
+
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return const ListTile(
+                            title: Text('Authentication Methods', style:
+                            TextStyle(color: Colors.black),),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            SwitchListTile(
+                                title: const Text('Login using GitHub'),
+                                secondary: const Icon(Icons.code),
+                                value: isLoginUsingGithubEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isLoginUsingGithubEnabled = value;
+                                  });
+                                }
+                            ),
+                            SwitchListTile(
+                                title: const Text('Login using Apple'),
+                                secondary: const Icon(Icons.apple),
+                                value: isLoginUsingAppleEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isLoginUsingAppleEnabled = value;
+                                  });
+                                }
+                            ),
+                            SwitchListTile(
+                                title: const Text('Login using Facebook'),
+                                secondary: const Icon(Icons.facebook),
+                                value: isLoginUsingFacebookEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isLoginUsingFacebookEnabled = value;
+                                  });
+                                }
+                            ),
+                            SwitchListTile(
+                                title: const Text('Login using Email'),
+                                secondary: const Icon(Icons.email),
+                                value: isLoginUsingEmailEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isLoginUsingEmailEnabled = value;
+                                  });
+                                }
+                            ),
+                          ],
+                        ),
+                        isExpanded: isAuthTogglesListExpanded,
+                        canTapOnHeader: true,
+                      ),
+                    ],
                   ),
-                  SwitchListTile(
-                      title: const Text('Login using Apple'),
-                      secondary: const Icon(Icons.apple),
-                      value: isLoginUsingAppleEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          isLoginUsingAppleEnabled = value;
-                        });
-                      }
-                  ),
-                  SwitchListTile(
-                      title: const Text('Login using Facebook'),
-                      secondary: const Icon(Icons.facebook),
-                      value: isLoginUsingFacebookEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          isLoginUsingFacebookEnabled = value;
-                        });
-                      }
-                  ),
-                  SwitchListTile(
-                      title: const Text('Login using Email'),
-                      secondary: const Icon(Icons.email),
-                      value: isLoginUsingEmailEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          isLoginUsingEmailEnabled = value;
-                        });
-                      }
+                  ExpansionPanelList(
+                    animationDuration: const Duration(milliseconds: 600),
+                    expansionCallback: (panelIndex, isExpanded) {
+                      isAdminSetupExpanded = !isAdminSetupExpanded;
+                      setState(() {
+
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return const ListTile(
+                            title: Text('Admin setup', style:
+                            TextStyle(color: Colors.black),),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            TextFormField(
+                              controller: emailTextController,
+                              decoration: const InputDecoration(
+                                  hintText: 'email@provider.com'
+                              ),
+                            ),
+                            TextFormField(
+                              controller: passwordTextController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                  hintText: 'password'
+                              ),
+                            ),
+                            TextFormField(
+                              controller: rePasswordTextController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                  hintText: 'repeat password'
+                              ),
+                            ),
+                          ],
+                        ),
+                        isExpanded: isAdminSetupExpanded,
+                        canTapOnHeader: true,
+                      ),
+                    ],
                   ),
                   ElevatedButton(
                       child: const Text('Submit'),
@@ -388,7 +469,56 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           return;
                         }
 
-                        final response = await http
+                        if (emailTextController.text.isEmpty ||
+                            passwordTextController.text.isEmpty ||
+                            rePasswordTextController.text.isEmpty) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const AlertDialog(
+                                  content: Text('User fields must not be '
+                                      'blank'),
+                                );
+                              });
+                          return;
+                        }
+
+                        if (!EmailValidator.validate(emailTextController
+                            .text)) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const AlertDialog(
+                                  content: Text('Invalid email'),
+                                );
+                              });
+                          return;
+                        }
+
+                        if (passwordTextController.text !=
+                            rePasswordTextController.text) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const AlertDialog(
+                                  content: Text('Passwords doesn\'t match'),
+                                );
+                              });
+                          return;
+                        }
+
+                        if (passwordTextController.text.length <= 6) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const AlertDialog(
+                                  content: Text('Password is too short'),
+                                );
+                              });
+                          return;
+                        }
+
+                        final companyCreationResponse = await http
                             .post(Uri.parse('https://qalenium-api.herokuapp.com/company/createCompany'),
                           headers: <String, String> {
                             'Content-Type':'application/json; charset=UTF-8',
@@ -404,27 +534,91 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           }),
                         );
 
-                        if (response.statusCode == 200) {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return const AlertDialog(
-                                  content: Text('Company Registered '
-                                      'successfully'),
-                                );
-                              });
+                        if (companyCreationResponse.statusCode == 200) {
+                          // At this point, the company was registered
+                          // successfully already
 
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) =>
-                                  CompaniesRoute(theme: widget.theme))
+                          final companyQueryByNameResponse = await http
+                              .get(Uri.parse('https://qalenium-api.herokuapp'
+                              '.com/company/getCompanyByName/' +
+                              companyNameTextController.text)
                           );
+
+                          DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                          String deviceUuid = "";
+
+                          if (Platform.isAndroid) {
+                            AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+                            deviceUuid = androidInfo.androidId!;
+                          } else if (Platform.isIOS) {
+                            IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+                            deviceUuid = iosInfo.identifierForVendor!;
+                          }
+
+                          if (companyQueryByNameResponse.statusCode == 200) {
+                            List<dynamic> listCompanies = jsonDecode(companyQueryByNameResponse.body);
+                            List<Company> companies = listCompanies.map((company) => Company.companyFromJson(company)).toList();
+
+                            final userResponse = await http
+                                .post(Uri.parse('https://qalenium-api.herokuapp'
+                                '.com/user/signup'),
+                                headers: <String, String> {
+                                  'Content-Type':'application/json; charset=UTF-8',
+                                },
+                                body: jsonEncode(<String, String>{
+                                  'email': emailTextController.text,
+                                  'auth': sha512.convert(utf8.encode
+                                    (emailTextController.text + ':' +
+                                      passwordTextController.text)).toString(),
+                                  'companyId': companies[0].companyId
+                                      .toString(),
+                                  'deviceId': deviceUuid,
+                                  'isAdmin': true.toString()
+                                })
+                            );
+
+                            if (userResponse.statusCode == 200) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const AlertDialog(
+                                      content: Text('Company registered '
+                                          'successfully!'),
+                                    );
+                                  });
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) =>
+                                      CompaniesRoute(theme: widget.theme))
+                              );
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text(companyQueryByNameResponse.body),
+                                    );
+                                  });
+                            }
+
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(companyQueryByNameResponse.body),
+                                  );
+                                });
+                            return;
+                          }
+
                         } else {
                           showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  content: Text(response.body),
+                                  content: Text(companyCreationResponse.body),
                                 );
                               });
                         }
