@@ -184,7 +184,8 @@ class _UserSignupPageState extends State<UserSignupPage> {
                                 (emailTextController.text + ':' +
                                   passwordTextController.text)).toString(),
                               'companyId': widget.company.companyId.toString(),
-                              'deviceId': deviceUuid
+                              'deviceId': deviceUuid,
+                              'isAdmin': false.toString()
                             })
                           );
 
