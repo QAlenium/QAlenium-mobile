@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,32 +13,25 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterCompanyRoute extends StatelessWidget {
-  const RegisterCompanyRoute({Key? key}) : super(key: key);
+  const RegisterCompanyRoute({Key? key, required this.theme}) : super(key: key);
 
+  final FlexScheme theme;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Register Company',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const RegisterCompanyPage(title: 'Register Company Page'),
+      theme: FlexColorScheme.light(scheme: theme).toTheme,
+      darkTheme: FlexColorScheme.dark(scheme: theme).toTheme,
+      themeMode: ThemeMode.system,
+      home: RegisterCompanyPage(title: 'Register Company Page', theme: theme),
     );
   }
 }
 
 class RegisterCompanyPage extends StatefulWidget {
-  const RegisterCompanyPage({Key? key, required this.title}) : super(key: key);
+  const RegisterCompanyPage({Key? key, required this.title, required this
+      .theme}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -49,6 +43,7 @@ class RegisterCompanyPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final FlexScheme theme;
 
   @override
   State<RegisterCompanyPage> createState() => _RegisterCompanyPageState();
@@ -65,11 +60,28 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   bool isLoginUsingFacebookEnabled = false;
   bool isLoginUsingEmailEnabled = false;
 
-  late XFile _image = XFile(File('').path);
+  int selectedRadio = 1;
+
+  late XFile _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
   String? _retrieveDataError;
+
   dynamic _pickImageError;
 
-  int selectedRadio = 1;
+  Future<File> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load('assets/$path');
+    final file = File('${(await getTemporaryDirectory()).path}/$path');
+    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    return file;
+  }
+
+  String retrieveFilePathFromAsset(String assetPath) {
+    File file = File('');
+    getImageFileFromAssets(assetPath).then((file) => file.path);
+    setState(() {
+      _image = XFile(File(file.path).path);
+    });
+    return file.path;
+  }
 
   Text? _getRetrieveErrorWidget() {
     if (_retrieveDataError != null) {
@@ -100,7 +112,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
       return retrieveError;
     }
 
-    if (_image.path != '') {
+    if (_image.path != '' || _image.path.isNotEmpty) {
       return Semantics(
         label: 'image_picker_example_picked_image',
         child: kIsWeb
@@ -108,8 +120,8 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
           _image.path,
           alignment: Alignment.center,
         )
-            : Image.file(
-          File(_image.path),
+            : Image.asset(
+          'assets/qalenium_logo_white_background.png',
           alignment: Alignment.center,
         ),
       );
@@ -119,13 +131,21 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
         textAlign: TextAlign.center,
       );
     } else {
-      return Image.asset(
-        'assets/logo_company.png',
+      return  Image.asset(
+        'assets/qalenium_logo_white_background.png',
         semanticLabel: 'Company\'s logo',
         width: 100,
         height: 100,
       );
     }
+  }
+
+  String getStringFromAssetImage(String assetPath) {
+    String imageString = "";
+    getImageFileFromAssets(assetPath).then((file) =>
+    imageString = file.readAsStringSync()
+    );
+    return imageString;
   }
 
   Future<void> _onImageButtonPressed({BuildContext? context}) async {
@@ -136,7 +156,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
           source: selectedRadio == 1 ? ImageSource.gallery : ImageSource.camera,
           maxWidth: 100,
           maxHeight: 100,
-          imageQuality: 1,
+          imageQuality: 100,
         );
         setState(() {
           _image = pickedFile!;
@@ -228,21 +248,10 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
         });
   }
 
-  String getStringFromAssetImage(String assetPath) {
-    String imageString = "";
-    getImageFileFromAssets(assetPath).then((file) =>
-    imageString = file.readAsStringSync()
-    );
-    return imageString;
-  }
-
-  Future<File> getImageFileFromAssets(String path) async {
-    final byteData = await rootBundle.load('assets/$path');
-
-    final file = File('${(await getTemporaryDirectory()).path}/$path');
-    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-
-    return file;
+  @override
+  void initState() {
+    super.initState();
+    _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
   }
 
   @override
@@ -275,14 +284,14 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
                             return Image.asset(
-                              'assets/logo_company.png',
+                              'assets/qalenium_logo_white_background.png',
                               semanticLabel: 'Company\'s logo',
                               width: 100,
                               height: 100,
                             );
                           case ConnectionState.waiting:
                             return Image.asset(
-                              'assets/logo_company.png',
+                              'assets/qalenium_logo_white_background.png',
                               semanticLabel: 'Company\'s logo',
                               width: 100,
                               height: 100,
@@ -297,7 +306,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                               );
                             } else {
                               return Image.asset(
-                                'assets/logo_company.png',
+                                'assets/qalenium_logo_white_background.png',
                                 semanticLabel: 'Company\'s logo',
                                 width: 100,
                                 height: 100,
@@ -407,8 +416,8 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
                           Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => const
-                              CompaniesRoute())
+                              MaterialPageRoute(builder: (context) =>
+                                  CompaniesRoute(theme: widget.theme))
                           );
                         } else {
                           showDialog(

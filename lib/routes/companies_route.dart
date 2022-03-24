@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/routes/register/register_company_route.dart';
 
@@ -9,32 +10,27 @@ import 'package:qalenium_mobile/routes/signin_route.dart';
 import '../models/company.dart';
 
 class CompaniesRoute extends StatelessWidget {
-  const CompaniesRoute({Key? key}) : super(key: key);
+  const CompaniesRoute({Key? key, required this.theme}) : super(key:
+  key);
+
+  final FlexScheme theme;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'QAlenium',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const CompaniesPage(title: 'QAlenium Companies Page'),
+      theme: FlexColorScheme.light(scheme: theme).toTheme,
+      darkTheme: FlexColorScheme.dark(scheme: theme).toTheme,
+      themeMode: ThemeMode.system,
+      home: CompaniesPage(title: 'QAlenium Companies Page', theme: theme),
     );
   }
 }
 
 class CompaniesPage extends StatefulWidget {
-  const CompaniesPage({Key? key, required this.title}) : super(key: key);
+  const CompaniesPage({Key? key, required this.title, required this.theme}) :
+        super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -46,6 +42,7 @@ class CompaniesPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final FlexScheme theme;
 
   @override
   State<CompaniesPage> createState() => _CompaniesPageState();
@@ -59,7 +56,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
   void _goToRegisterCompanyPage() {
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const RegisterCompanyRoute())
+        MaterialPageRoute(builder: (context) => RegisterCompanyRoute(theme: widget.theme))
     );
   }
 
@@ -81,6 +78,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
         List<dynamic> listCompanies = jsonDecode(response.body);
         companies = listCompanies.map((company) => Company.companyFromJson
           (company)).toList();
+        _foundUsers = companies;
       });
     }
   }
@@ -143,7 +141,8 @@ class _CompaniesPageState extends State<CompaniesPage> {
 
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignInRoute(company: companies[index])))
+                      MaterialPageRoute(builder: (context) => SignInRoute
+                        (company: companies[index], theme: widget.theme)))
                 },
                 child: Card(
                   //semanticContainer: true,
@@ -163,7 +162,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
                                 padding: const EdgeInsets.all(20),
                                 child: _foundUsers[index].logo == '' ?
                                 Image.asset(
-                                  'assets/logo_company.png',
+                                  'assets/qalenium_logo.png',
                                   alignment: Alignment.center,
                                 ) :
                                 Image.memory(
