@@ -12,27 +12,37 @@ import 'package:qalenium_mobile/routes/signin_route.dart';
 
 class UserSignupRoute extends StatelessWidget {
   const UserSignupRoute({Key? key, required this.company, required this
-      .theme}) : super(key: key);
+      .flexSchemeData}) : super(key: key);
 
   final Company company;
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Register User',
-      theme: FlexColorScheme.light(scheme: theme).toTheme,
-      darkTheme: FlexColorScheme.dark(scheme: theme).toTheme,
+      theme: FlexThemeData.light(
+        primary: flexSchemeData.light.primary,
+        primaryVariant: flexSchemeData.light.primaryVariant,
+        secondary: flexSchemeData.light.secondary,
+        secondaryVariant: flexSchemeData.light.secondaryVariant,
+      ),
+      darkTheme: FlexThemeData.dark(
+        primary: flexSchemeData.dark.primary,
+        primaryVariant: flexSchemeData.dark.primaryVariant,
+        secondary: flexSchemeData.dark.secondary,
+        secondaryVariant: flexSchemeData.dark.secondaryVariant,
+      ),
       themeMode: ThemeMode.system,
       home: UserSignupPage(title: 'Register User Page', company: company,
-          theme: theme),
+          flexSchemeData: flexSchemeData),
     );
   }
 }
 
 class UserSignupPage extends StatefulWidget {
   const UserSignupPage({Key? key, required this.title, required this.company,
-    required this.theme}) : super(key: key);
+    required this.flexSchemeData}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -45,7 +55,7 @@ class UserSignupPage extends StatefulWidget {
 
   final Company company;
   final String title;
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
 
   @override
   State<UserSignupPage> createState() => _UserSignupPageState();
@@ -203,7 +213,7 @@ class _UserSignupPageState extends State<UserSignupPage> {
                                 context,
                                 MaterialPageRoute(builder: (context) =>
                                     SignInRoute(company: widget.company,
-                                        theme: widget.theme))
+                                        flexSchemeData: widget.flexSchemeData))
                             );
                           } else {
                             showDialog(

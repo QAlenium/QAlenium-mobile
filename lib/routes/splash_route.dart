@@ -12,23 +12,49 @@ Future main() async {
 class SplashRoute extends StatelessWidget {
   const SplashRoute({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    const FlexSchemeData _myFlexScheme = FlexSchemeData(
+      name: 'Midnight blue',
+      description: 'Midnight blue theme, custom definition of all colors',
+      light: FlexSchemeColor(
+        primary: Color(0xFF071330),
+        primaryVariant: Color(0xFF071330),
+        secondary: Color(0xFFFFC929),
+        secondaryVariant: Color(0xFFFFC929)
+      ),
+      dark: FlexSchemeColor(
+          primary: Color(0xFF071330),
+          primaryVariant: Color(0xFF071330),
+          secondary: Color(0xFFFFC929),
+          secondaryVariant: Color(0xFFFFC929)
+      ),
+    );
+
     return MaterialApp(
       title: 'Splash',
-      theme: FlexColorScheme.light(scheme: FlexScheme.ebonyClay).toTheme,
-      darkTheme: FlexColorScheme.dark(scheme: FlexScheme.ebonyClay).toTheme,
-      themeMode: ThemeMode.system,
-      home: const SplashPage(title: 'Splash Page', theme: FlexScheme.ebonyClay),
+      theme: FlexThemeData.light(
+        primary: _myFlexScheme.light.primary,
+        primaryVariant: _myFlexScheme.light.primaryVariant,
+        secondary: _myFlexScheme.light.secondary,
+        secondaryVariant: _myFlexScheme.light.secondaryVariant,
+      ),
+      darkTheme: FlexThemeData.dark(
+        primary: _myFlexScheme.dark.primary,
+        primaryVariant: _myFlexScheme.dark.primaryVariant,
+        secondary: _myFlexScheme.dark.secondary,
+        secondaryVariant: _myFlexScheme.dark.secondaryVariant,
+      ),
+      home: const SplashPage(title: 'Splash Page', flexSchemeData: _myFlexScheme),
     );
   }
 }
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key, required this.title, required this.theme}) : super
-(key:
-  key);
+  const SplashPage({Key? key, required this.title, required this.flexSchemeData}) : super
+      (key:
+    key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -40,7 +66,7 @@ class SplashPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -112,7 +138,7 @@ class _SplashPageState extends State<SplashPage> {
     Future.delayed(Duration.zero, () async {
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CompaniesRoute(theme: widget.theme))
+          MaterialPageRoute(builder: (context) => CompaniesRoute(flexSchemeData: widget.flexSchemeData))
       );
       FlutterNativeSplash.remove();
     });

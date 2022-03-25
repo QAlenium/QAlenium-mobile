@@ -18,25 +18,35 @@ import 'package:http/http.dart' as http;
 import '../../models/company.dart';
 
 class RegisterCompanyRoute extends StatelessWidget {
-  const RegisterCompanyRoute({Key? key, required this.theme}) : super(key: key);
+  const RegisterCompanyRoute({Key? key, required this.flexSchemeData}) : super(key: key);
 
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Register Company',
-      theme: FlexColorScheme.light(scheme: theme).toTheme,
-      darkTheme: FlexColorScheme.dark(scheme: theme).toTheme,
+      theme: FlexThemeData.light(
+        primary: flexSchemeData.light.primary,
+        primaryVariant: flexSchemeData.light.primaryVariant,
+        secondary: flexSchemeData.light.secondary,
+        secondaryVariant: flexSchemeData.light.secondaryVariant,
+      ),
+      darkTheme: FlexThemeData.dark(
+        primary: flexSchemeData.dark.primary,
+        primaryVariant: flexSchemeData.dark.primaryVariant,
+        secondary: flexSchemeData.dark.secondary,
+        secondaryVariant: flexSchemeData.dark.secondaryVariant,
+      ),
       themeMode: ThemeMode.system,
-      home: RegisterCompanyPage(title: 'Register Company Page', theme: theme),
+      home: RegisterCompanyPage(title: 'Register Company Page', flexSchemeData: flexSchemeData),
     );
   }
 }
 
 class RegisterCompanyPage extends StatefulWidget {
   const RegisterCompanyPage({Key? key, required this.title, required this
-      .theme}) : super(key: key);
+      .flexSchemeData}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -48,7 +58,7 @@ class RegisterCompanyPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
 
   @override
   State<RegisterCompanyPage> createState() => _RegisterCompanyPageState();
@@ -590,7 +600,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) =>
-                                      CompaniesRoute(theme: widget.theme))
+                                      CompaniesRoute(flexSchemeData: widget.flexSchemeData))
                               );
                             } else {
                               showDialog(
