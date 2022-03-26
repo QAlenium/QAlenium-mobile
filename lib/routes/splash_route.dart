@@ -15,38 +15,43 @@ class SplashRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    const FlexSchemeData _myFlexScheme = FlexSchemeData(
+    FlexSchemeData _myFlexScheme = FlexSchemeData(
       name: 'Midnight blue',
       description: 'Midnight blue theme, custom definition of all colors',
       light: FlexSchemeColor(
-        primary: Color(0xFF071330),
-        primaryVariant: Color(0xFF071330),
-        secondary: Color(0xFFFFC929),
-        secondaryVariant: Color(0xFFFFC929)
+        primary: Color(int.parse('FF071330', radix: 16)),
+        primaryVariant: Color(int.parse('FF071330', radix: 16)),
+        secondary: Color(int.parse('FFFFC929', radix: 16)),
+        secondaryVariant: Color(int.parse('FFFFC929', radix: 16))
       ),
       dark: FlexSchemeColor(
-          primary: Color(0xFF071330),
-          primaryVariant: Color(0xFF071330),
-          secondary: Color(0xFFFFC929),
-          secondaryVariant: Color(0xFFFFC929)
+          primary: Color(int.parse('FF071330', radix: 16)),
+          primaryVariant: Color(int.parse('FF071330', radix: 16)),
+          secondary: Color(int.parse('FFFFC929', radix: 16)),
+          secondaryVariant: Color(int.parse('FFFFC929', radix: 16))
       ),
     );
 
-    return MaterialApp(
-      title: 'Splash',
-      theme: FlexThemeData.light(
-        primary: _myFlexScheme.light.primary,
-        primaryVariant: _myFlexScheme.light.primaryVariant,
-        secondary: _myFlexScheme.light.secondary,
-        secondaryVariant: _myFlexScheme.light.secondaryVariant,
-      ),
-      darkTheme: FlexThemeData.dark(
-        primary: _myFlexScheme.dark.primary,
-        primaryVariant: _myFlexScheme.dark.primaryVariant,
-        secondary: _myFlexScheme.dark.secondary,
-        secondaryVariant: _myFlexScheme.dark.secondaryVariant,
-      ),
-      home: const SplashPage(title: 'Splash Page', flexSchemeData: _myFlexScheme),
+    return AnimatedBuilder(
+      animation: ChangeNotifier(),
+      builder: (BuildContext context, Widget? child) {
+        return MaterialApp(
+          title: 'Splash',
+          theme: FlexThemeData.light(
+            primary: _myFlexScheme.light.primary,
+            primaryVariant: _myFlexScheme.light.primaryVariant,
+            secondary: _myFlexScheme.light.secondary,
+            secondaryVariant: _myFlexScheme.light.secondaryVariant,
+          ),
+          darkTheme: FlexThemeData.dark(
+            primary: _myFlexScheme.dark.primary,
+            primaryVariant: _myFlexScheme.dark.primaryVariant,
+            secondary: _myFlexScheme.dark.secondary,
+            secondaryVariant: _myFlexScheme.dark.secondaryVariant,
+          ),
+          home: SplashPage(title: 'Splash Page', flexSchemeData: _myFlexScheme),
+        );
+      },
     );
   }
 }

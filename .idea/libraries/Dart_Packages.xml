@@ -240,6 +240,13 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_colorpicker">
+          <value>
+            <list>
+              <option value="/Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_colorpicker-1.0.3/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_launcher_icons_maker">
           <value>
             <list>
@@ -689,6 +696,7 @@
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.46.0/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flex_color_scheme-4.2.0/lib" />
+      <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_colorpicker-1.0.3/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons_maker-0.10.2/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_native_splash-2.1.1/lib" />

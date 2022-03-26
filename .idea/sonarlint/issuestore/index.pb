@@ -7,3 +7,11 @@ G
 lib/models/company.dart,3/5/3535fb4769d53816b48c724fb4587c7bed5e0850
 E
 ios/Runner/Info.plist,7/0/7076b60f5e64ebfddc934ae3c4a7a7b87e461a6f
+x
+Handroid/app/src/main/kotlin/com/qalenium/qalenium_mobile/MainActivity.kt,5/8/58b95a37506eab66ef9b438f9e7003c875f01600
+C
+qalenium_mobile.iml,2/6/26f87ea0d84365f3903ad1c1d938afccb18c0f84
+T
+$lib/generated_plugin_registrant.dart,1/b/1be4a6b36b025841d630b388b6a83be28927674d
+Z
+*lib/routes/register/user_signup_route.dart,1/3/13022dacb470d5c0b45cbd4128334496c229054f

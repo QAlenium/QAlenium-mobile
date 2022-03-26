@@ -9,6 +9,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:path_provider/path_provider.dart';
@@ -72,18 +73,40 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final rePasswordTextController = TextEditingController();
-
   final ImagePicker _picker = ImagePicker();
   dynamic _pickImageError;
   late XFile _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
+
+  Color primaryColor = const Color(0xFF071330);
+  Color primaryVariantColor = const Color(0xFF071330);
+  Color secondaryColor = const Color(0xFFFFC929);
+  Color secondaryVariantColor = const Color(0xFFFFC929);
+
   bool isLoginUsingGithubEnabled = false;
   bool isLoginUsingAppleEnabled = false;
   bool isLoginUsingFacebookEnabled = false;
   bool isLoginUsingEmailEnabled = false;
   bool isAuthTogglesListExpanded = false;
   bool isAdminSetupExpanded = false;
+  bool isColorPickerExpanded = false;
   int selectedRadio = 1;
   String? _retrieveDataError;
+
+  void updatePrimaryColor(Color color) {
+    setState(() => primaryColor = color);
+  }
+
+  void updatePrimaryVariantColor(Color color) {
+    setState(() => primaryVariantColor = color);
+  }
+
+  void updateSecondaryColor(Color color) {
+    setState(() => secondaryColor = color);
+  }
+
+  void updateSecondaryVariantColor(Color color) {
+    setState(() => secondaryVariantColor = color);
+  }
 
   Future<File> getImageFileFromAssets(String path) async {
     final byteData = await rootBundle.load('assets/$path');
@@ -464,9 +487,77 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                       ),
                     ],
                   ),
+                  ExpansionPanelList(
+                    animationDuration: const Duration(milliseconds: 600),
+                    expansionCallback: (panelIndex, isExpanded) {
+                      isColorPickerExpanded = !isColorPickerExpanded;
+                      setState(() {
+
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return const ListTile(
+                            title: Text('Color theme selection', style:
+                            TextStyle(color: Colors.black),),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            const Text('Primary Theme Color'),
+                            ColorPicker(
+                                pickerColor: primaryColor,
+                                onColorChanged: updatePrimaryColor
+                            ),
+                            const Text('Primary Variant Theme Color'),
+                            ColorPicker(
+                                pickerColor: primaryVariantColor,
+                                onColorChanged: updatePrimaryVariantColor
+                            ),
+                            const Text('Secondary Theme Color'),
+                            ColorPicker(
+                                pickerColor: secondaryColor,
+                                onColorChanged: updateSecondaryColor
+                            ),
+                            const Text('Primary Variant Theme Color'),
+                            ColorPicker(
+                                pickerColor: secondaryVariantColor,
+                                onColorChanged: updateSecondaryVariantColor
+                            ),
+                            ElevatedButton(
+                                onPressed: () async {
+
+                                  FlexSchemeData(
+                                    name: 'Midnight blue',
+                                    description: 'Midnight blue theme, custom definition of all colors',
+                                    light: FlexSchemeColor(
+                                        primary: primaryColor,
+                                        primaryVariant: primaryVariantColor,
+                                        secondary: secondaryColor,
+                                        secondaryVariant: secondaryVariantColor
+                                    ),
+                                    dark: FlexSchemeColor(
+                                        primary: primaryColor,
+                                        primaryVariant: primaryVariantColor,
+                                        secondary: secondaryColor,
+                                        secondaryVariant: secondaryVariantColor
+                                    ),
+                                  );
+                                },
+                                child: const Text('Try me out!'),
+                            )
+                          ],
+                        ),
+                        isExpanded: isColorPickerExpanded,
+                        canTapOnHeader: true,
+                      ),
+                    ],
+                  ),
                   ElevatedButton(
                       child: const Text('Submit'),
                       onPressed: () async {
+
                         if (companyNameTextController.text.isEmpty) {
                           showDialog(
                               context: context,
