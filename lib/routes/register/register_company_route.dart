@@ -15,6 +15,7 @@ import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:validators/validators.dart';
 
 import '../../models/company.dart';
 
@@ -1023,6 +1024,131 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           return;
                         }
 
+                        if (isContinuousQualityEnabled) {
+                          if (continuousQualityURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Continuous Quality URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(continuousQualityURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The Continuous Quality URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
+                        if (isCiCdEnabled) {
+                          if (ciCdURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('CI/CD URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(ciCdURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The CI/CD URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
+                        if (isBoardKanbanEnabled) {
+                          if (boardKanbanURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Board/Kanban URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(boardKanbanURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The Board/Kanban URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
+                        if (isTestingEnabled) {
+                          if (testingURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Messaging URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(testingURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The Messaging URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
+                        if (isMessagingEnabled) {
+                          if (messagingURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Messaging URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(messagingURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The Messaging URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
                         final companyCreationResponse = await http
                             .post(Uri.parse('https://qalenium-api.herokuapp.com/company/createCompany'),
                           headers: <String, String> {
@@ -1031,19 +1157,23 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           body: jsonEncode(<String, String>{
                             'name': companyNameTextController.text,
                             'logo': base64Encode(File(_image.path).readAsBytesSync()),
-                            'flavourColor': '#000000',
                             'loginGit': isLoginUsingGithubEnabled.toString(),
                             'loginApple': isLoginUsingAppleEnabled.toString(),
                             'loginFacebook': isLoginUsingFacebookEnabled.toString(),
                             'loginEmail': isLoginUsingEmailEnabled.toString(),
-                            'primaryLightColor':primaryColor.hexCode,
-                            'primaryLightVariantColor':primaryVariantColor.hexCode,
-                            'secondaryLightColor':secondaryColor.hexCode,
-                            'secondaryLightVariantColor':secondaryVariantColor.hexCode,
-                            'primaryDarkColor':primaryColor.hexCode,
-                            'primaryDarkVariantColor':primaryVariantColor.hexCode,
-                            'secondaryDarkColor':secondaryColor.hexCode,
-                            'secondaryDarkVariantColor':secondaryVariantColor.hexCode,
+                            'primaryLightColor': primaryColor.hexCode,
+                            'primaryLightVariantColor': primaryVariantColor.hexCode,
+                            'secondaryLightColor': secondaryColor.hexCode,
+                            'secondaryLightVariantColor': secondaryVariantColor.hexCode,
+                            'primaryDarkColor': primaryColor.hexCode,
+                            'primaryDarkVariantColor': primaryVariantColor.hexCode,
+                            'secondaryDarkColor': secondaryColor.hexCode,
+                            'secondaryDarkVariantColor': secondaryVariantColor.hexCode,
+                            'continuousQualityUrl': Uri.encodeFull(continuousQualityURLTextController.text),
+                            'ciCdUrl': Uri.encodeFull(ciCdURLTextController.text),
+                            'boardKanbanUrl': Uri.encodeFull(boardKanbanURLTextController.text),
+                            'testingUrl': Uri.encodeFull(testingURLTextController.text),
+                            'messagingUrl': Uri.encodeFull(messagingURLTextController.text),
                           }),
                         );
 
