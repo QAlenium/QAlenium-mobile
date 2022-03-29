@@ -150,12 +150,27 @@ class _CompaniesPageState extends State<CompaniesPage> {
           itemBuilder: (context, index) {
             return GestureDetector(
                 onTap: () => {
-
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SignInRoute(
                           company: companies[index],
-                          flexSchemeData: widget.flexSchemeData
+                          flexSchemeData: FlexSchemeData(
+                              name: 'Midnight blue',
+                              description: 'Midnight blue theme, custom definition of all colors',
+                              light: FlexSchemeColor(
+                                primary: Color(int.parse(companies[index]
+                                    .primaryLightColor , radix: 16)),
+                                primaryVariant: Color(int.parse(companies[index].primaryLightColor , radix: 16)),
+                                secondary: Color(int.parse(companies[index].primaryLightColor , radix: 16)),
+                                secondaryVariant: Color(int.parse(companies[index].primaryLightColor , radix: 16)),
+                              ),
+                              dark: FlexSchemeColor(
+                                primary: Color(int.parse(companies[index].primaryLightColor , radix: 16)),
+                                primaryVariant: Color(int.parse(companies[index].primaryLightColor , radix: 16)),
+                                secondary: Color(int.parse(companies[index].primaryLightColor , radix: 16)),
+                                secondaryVariant: Color(int.parse(companies[index].primaryLightColor , radix: 16)),
+                              )
+                          )
                       ))
                   )
                 },
