@@ -10,26 +10,36 @@ import 'package:qalenium_mobile/routes/signin_route.dart';
 import '../models/company.dart';
 
 class CompaniesRoute extends StatelessWidget {
-  const CompaniesRoute({Key? key, required this.theme}) : super(key:
+  const CompaniesRoute({Key? key, required this.flexSchemeData}) : super(key:
   key);
 
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'QAlenium',
-      theme: FlexColorScheme.light(scheme: theme).toTheme,
-      darkTheme: FlexColorScheme.dark(scheme: theme).toTheme,
+      theme: FlexThemeData.light(
+        primary: flexSchemeData.light.primary,
+        primaryVariant: flexSchemeData.light.primaryVariant,
+        secondary: flexSchemeData.light.secondary,
+        secondaryVariant: flexSchemeData.light.secondaryVariant,
+      ),
+      darkTheme: FlexThemeData.dark(
+        primary: flexSchemeData.dark.primary,
+        primaryVariant: flexSchemeData.dark.primaryVariant,
+        secondary: flexSchemeData.dark.secondary,
+        secondaryVariant: flexSchemeData.dark.secondaryVariant,
+      ),
       themeMode: ThemeMode.system,
-      home: CompaniesPage(title: 'QAlenium Companies Page', theme: theme),
+      home: CompaniesPage(title: 'QAlenium Companies Page', flexSchemeData: flexSchemeData),
     );
   }
 }
 
 class CompaniesPage extends StatefulWidget {
-  const CompaniesPage({Key? key, required this.title, required this.theme}) :
+  const CompaniesPage({Key? key, required this.title, required this.flexSchemeData}) :
         super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -42,7 +52,7 @@ class CompaniesPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
 
   @override
   State<CompaniesPage> createState() => _CompaniesPageState();
@@ -56,7 +66,9 @@ class _CompaniesPageState extends State<CompaniesPage> {
   void _goToRegisterCompanyPage() {
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => RegisterCompanyRoute(theme: widget.theme))
+        MaterialPageRoute(builder: (context) => RegisterCompanyRoute(
+            flexSchemeData: widget.flexSchemeData)
+        )
     );
   }
 
@@ -141,8 +153,11 @@ class _CompaniesPageState extends State<CompaniesPage> {
 
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignInRoute
-                        (company: companies[index], theme: widget.theme)))
+                      MaterialPageRoute(builder: (context) => SignInRoute(
+                          company: companies[index],
+                          flexSchemeData: widget.flexSchemeData
+                      ))
+                  )
                 },
                 child: Card(
                   //semanticContainer: true,
@@ -167,7 +182,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
                                 ) :
                                 Image.memory(
                                   const Base64Decoder().convert
-                                  (_foundUsers[index].logo),
+                                    (_foundUsers[index].logo),
                                   alignment: Alignment.center,
                                 )
                             ),

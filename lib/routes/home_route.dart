@@ -1,32 +1,36 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
 class HomeRoute extends StatelessWidget {
-  const HomeRoute({Key? key}) : super(key: key);
+  const HomeRoute({Key? key, required this.flexSchemeData}) : super(key: key);
 
+  final FlexSchemeData flexSchemeData;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Home',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+      theme: FlexThemeData.light(
+        primary: flexSchemeData.light.primary,
+        primaryVariant: flexSchemeData.light.primaryVariant,
+        secondary: flexSchemeData.light.secondary,
+        secondaryVariant: flexSchemeData.light.secondaryVariant,
       ),
-      home: const HomePage(title: 'Home Page'),
+      darkTheme: FlexThemeData.dark(
+        primary: flexSchemeData.dark.primary,
+        primaryVariant: flexSchemeData.dark.primaryVariant,
+        secondary: flexSchemeData.dark.secondary,
+        secondaryVariant: flexSchemeData.dark.secondaryVariant,
+      ),
+      themeMode: ThemeMode.system,
+      home: HomePage(title: 'Home Page', flexSchemeData: flexSchemeData),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
+  const HomePage({Key? key, required this.title, required this.flexSchemeData}) : super(key:
+  key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -38,6 +42,7 @@ class HomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final FlexSchemeData flexSchemeData;
 
   @override
   State<HomePage> createState() => _HomePageState();

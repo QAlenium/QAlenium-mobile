@@ -9,6 +9,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,25 +19,35 @@ import 'package:http/http.dart' as http;
 import '../../models/company.dart';
 
 class RegisterCompanyRoute extends StatelessWidget {
-  const RegisterCompanyRoute({Key? key, required this.theme}) : super(key: key);
+  const RegisterCompanyRoute({Key? key, required this.flexSchemeData}) : super(key: key);
 
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Register Company',
-      theme: FlexColorScheme.light(scheme: theme).toTheme,
-      darkTheme: FlexColorScheme.dark(scheme: theme).toTheme,
+      theme: FlexThemeData.light(
+        primary: flexSchemeData.light.primary,
+        primaryVariant: flexSchemeData.light.primaryVariant,
+        secondary: flexSchemeData.light.secondary,
+        secondaryVariant: flexSchemeData.light.secondaryVariant,
+      ),
+      darkTheme: FlexThemeData.dark(
+        primary: flexSchemeData.dark.primary,
+        primaryVariant: flexSchemeData.dark.primaryVariant,
+        secondary: flexSchemeData.dark.secondary,
+        secondaryVariant: flexSchemeData.dark.secondaryVariant,
+      ),
       themeMode: ThemeMode.system,
-      home: RegisterCompanyPage(title: 'Register Company Page', theme: theme),
+      home: RegisterCompanyPage(title: 'Register Company Page', flexSchemeData: flexSchemeData),
     );
   }
 }
 
 class RegisterCompanyPage extends StatefulWidget {
   const RegisterCompanyPage({Key? key, required this.title, required this
-      .theme}) : super(key: key);
+      .flexSchemeData}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -48,7 +59,7 @@ class RegisterCompanyPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  final FlexScheme theme;
+  final FlexSchemeData flexSchemeData;
 
   @override
   State<RegisterCompanyPage> createState() => _RegisterCompanyPageState();
@@ -62,18 +73,40 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final rePasswordTextController = TextEditingController();
-
   final ImagePicker _picker = ImagePicker();
   dynamic _pickImageError;
   late XFile _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
+
+  Color primaryColor = const Color(0xFF071330);
+  Color primaryVariantColor = const Color(0xFF071330);
+  Color secondaryColor = const Color(0xFFFFC929);
+  Color secondaryVariantColor = const Color(0xFFFFC929);
+
   bool isLoginUsingGithubEnabled = false;
   bool isLoginUsingAppleEnabled = false;
   bool isLoginUsingFacebookEnabled = false;
   bool isLoginUsingEmailEnabled = false;
   bool isAuthTogglesListExpanded = false;
   bool isAdminSetupExpanded = false;
+  bool isColorPickerExpanded = false;
   int selectedRadio = 1;
   String? _retrieveDataError;
+
+  void updatePrimaryColor(Color color) {
+    setState(() => primaryColor = color);
+  }
+
+  void updatePrimaryVariantColor(Color color) {
+    setState(() => primaryVariantColor = color);
+  }
+
+  void updateSecondaryColor(Color color) {
+    setState(() => secondaryColor = color);
+  }
+
+  void updateSecondaryVariantColor(Color color) {
+    setState(() => secondaryVariantColor = color);
+  }
 
   Future<File> getImageFileFromAssets(String path) async {
     final byteData = await rootBundle.load('assets/$path');
@@ -454,9 +487,77 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                       ),
                     ],
                   ),
+                  ExpansionPanelList(
+                    animationDuration: const Duration(milliseconds: 600),
+                    expansionCallback: (panelIndex, isExpanded) {
+                      isColorPickerExpanded = !isColorPickerExpanded;
+                      setState(() {
+
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return const ListTile(
+                            title: Text('Color theme selection', style:
+                            TextStyle(color: Colors.black),),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            const Text('Primary Theme Color'),
+                            ColorPicker(
+                                pickerColor: primaryColor,
+                                onColorChanged: updatePrimaryColor
+                            ),
+                            const Text('Primary Variant Theme Color'),
+                            ColorPicker(
+                                pickerColor: primaryVariantColor,
+                                onColorChanged: updatePrimaryVariantColor
+                            ),
+                            const Text('Secondary Theme Color'),
+                            ColorPicker(
+                                pickerColor: secondaryColor,
+                                onColorChanged: updateSecondaryColor
+                            ),
+                            const Text('Primary Variant Theme Color'),
+                            ColorPicker(
+                                pickerColor: secondaryVariantColor,
+                                onColorChanged: updateSecondaryVariantColor
+                            ),
+                            ElevatedButton(
+                                onPressed: () async {
+
+                                  FlexSchemeData(
+                                    name: 'Midnight blue',
+                                    description: 'Midnight blue theme, custom definition of all colors',
+                                    light: FlexSchemeColor(
+                                        primary: primaryColor,
+                                        primaryVariant: primaryVariantColor,
+                                        secondary: secondaryColor,
+                                        secondaryVariant: secondaryVariantColor
+                                    ),
+                                    dark: FlexSchemeColor(
+                                        primary: primaryColor,
+                                        primaryVariant: primaryVariantColor,
+                                        secondary: secondaryColor,
+                                        secondaryVariant: secondaryVariantColor
+                                    ),
+                                  );
+                                },
+                                child: const Text('Try me out!'),
+                            )
+                          ],
+                        ),
+                        isExpanded: isColorPickerExpanded,
+                        canTapOnHeader: true,
+                      ),
+                    ],
+                  ),
                   ElevatedButton(
                       child: const Text('Submit'),
                       onPressed: () async {
+
                         if (companyNameTextController.text.isEmpty) {
                           showDialog(
                               context: context,
@@ -530,7 +631,15 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                             'loginGit': isLoginUsingGithubEnabled.toString(),
                             'loginApple': isLoginUsingAppleEnabled.toString(),
                             'loginFacebook': isLoginUsingFacebookEnabled.toString(),
-                            'loginEmail': isLoginUsingEmailEnabled.toString()
+                            'loginEmail': isLoginUsingEmailEnabled.toString(),
+                            'primaryLightColor':primaryColor.hexCode,
+                            'primaryLightVariantColor':primaryVariantColor.hexCode,
+                            'secondaryLightColor':secondaryColor.hexCode,
+                            'secondaryLightVariantColor':secondaryVariantColor.hexCode,
+                            'primaryDarkColor':primaryColor.hexCode,
+                            'primaryDarkVariantColor':primaryVariantColor.hexCode,
+                            'secondaryDarkColor':secondaryColor.hexCode,
+                            'secondaryDarkVariantColor':secondaryVariantColor.hexCode,
                           }),
                         );
 
@@ -590,7 +699,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) =>
-                                      CompaniesRoute(theme: widget.theme))
+                                      CompaniesRoute(flexSchemeData: widget.flexSchemeData))
                               );
                             } else {
                               showDialog(
