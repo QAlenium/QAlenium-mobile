@@ -2,6 +2,7 @@ import 'package:crypto/crypto.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:qalenium_mobile/routes/home_route.dart';
 import 'package:qalenium_mobile/routes/register/user_signup_route.dart';
 
@@ -255,6 +256,21 @@ class _SignInPageState extends State<SignInPage> {
                         },
                       ),
                     ),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.apartment),
+                        label: const Text('Change company'),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>
+                                  CompaniesRoute(flexSchemeData: widget.flexSchemeData))
+                          );
+                        },
+                      ),
+                    )
                   ],
                 ),
               )),
