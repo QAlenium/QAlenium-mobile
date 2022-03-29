@@ -14,6 +14,11 @@ class Company {
   final String primaryDarkVariantColor;
   final String secondaryDarkColor;
   final String secondaryDarkVariantColor;
+  final String continuousQualityUrl;
+  final String ciCdUrl;
+  final String boardKanbanUrl;
+  final String testingUrl;
+  final String messagingUrl;
 
   const Company({
     required this.companyId,
@@ -30,8 +35,12 @@ class Company {
     required this.primaryDarkColor,
     required this.primaryDarkVariantColor,
     required this.secondaryDarkColor,
-    required this.secondaryDarkVariantColor
-
+    required this.secondaryDarkVariantColor,
+    required this.continuousQualityUrl,
+    required this.ciCdUrl,
+    required this.boardKanbanUrl,
+    required this.messagingUrl,
+    required this.testingUrl
   });
 
   factory Company.companyFromJson(Map<String, dynamic> json) {
@@ -50,7 +59,12 @@ class Company {
         primaryDarkColor: json['primaryDarkColor'],
         primaryDarkVariantColor: json['primaryDarkVariantColor'],
         secondaryDarkColor: json['secondaryDarkColor'],
-        secondaryDarkVariantColor: json['secondaryDarkVariantColor']
+        secondaryDarkVariantColor: json['secondaryDarkVariantColor'],
+        continuousQualityUrl: json['continuousQualityUrl'] ?? "",
+        ciCdUrl: json['ciCdUrl'] ?? "",
+        boardKanbanUrl: json['boardKanbanUrl'] ?? "",
+        testingUrl: json['testingUrl'] ?? "",
+        messagingUrl: json['messagingUrl'] ?? ""
     );
   }
 }

@@ -15,6 +15,7 @@ import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:validators/validators.dart';
 
 import '../../models/company.dart';
 
@@ -73,6 +74,32 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final rePasswordTextController = TextEditingController();
+  final continuousQualityURLTextController = TextEditingController();
+  final ciCdURLTextController = TextEditingController();
+  final boardKanbanURLTextController = TextEditingController();
+  final testingURLTextController = TextEditingController();
+  final messagingURLTextController = TextEditingController();
+
+  final continuousQualityTokenTextController = TextEditingController();
+  final continuousQualityUsernameTextController = TextEditingController();
+  final continuousQualityPasswordTextController = TextEditingController();
+
+  final ciCdTokenTextController = TextEditingController();
+  final ciCdUsernameTextController = TextEditingController();
+  final ciCdPasswordTextController = TextEditingController();
+
+  final boardKanbanTokenTextController = TextEditingController();
+  final boardKanbanUsernameTextController = TextEditingController();
+  final boardKanbanPasswordTextController = TextEditingController();
+
+  final testingTokenTextController = TextEditingController();
+  final testingUsernameTextController = TextEditingController();
+  final testingPasswordTextController = TextEditingController();
+
+  final messagingTokenTextController = TextEditingController();
+  final messagingUsernameTextController = TextEditingController();
+  final messagingPasswordTextController = TextEditingController();
+
   final ImagePicker _picker = ImagePicker();
   dynamic _pickImageError;
   late XFile _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
@@ -89,6 +116,18 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   bool isAuthTogglesListExpanded = false;
   bool isAdminSetupExpanded = false;
   bool isColorPickerExpanded = false;
+  bool isToolsSetupExpanded = false;
+  bool isContinuousQualityEnabled = false;
+  bool isCiCdEnabled = false;
+  bool isBoardKanbanEnabled = false;
+  bool isTestingEnabled = false;
+  bool isMessagingEnabled = false;
+  bool isContinuousQualityAuthTokenEnabled = false;
+  bool isCiCdAuthTokenEnabled = false;
+  bool isBoardKanbanAuthTokenEnabled = false;
+  bool isTestingAuthTokenEnabled = false;
+  bool isMessagingAuthTokenEnabled = false;
+
   int selectedRadio = 1;
   String? _retrieveDataError;
 
@@ -374,7 +413,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                     controller: companyNameTextController,
                     textAlign: TextAlign.center,
                     decoration: const InputDecoration(
-                      hintText: 'Type company name here',
+                      hintText: 'Type company name',
                     ),
                   ),
                   ExpansionPanelList(
@@ -526,30 +565,396 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                                 onColorChanged: updateSecondaryVariantColor
                             ),
                             ElevatedButton(
-                                onPressed: () async {
+                              onPressed: () async {
 
-                                  FlexSchemeData(
-                                    name: 'Midnight blue',
-                                    description: 'Midnight blue theme, custom definition of all colors',
-                                    light: FlexSchemeColor(
-                                        primary: primaryColor,
-                                        primaryVariant: primaryVariantColor,
-                                        secondary: secondaryColor,
-                                        secondaryVariant: secondaryVariantColor
-                                    ),
-                                    dark: FlexSchemeColor(
-                                        primary: primaryColor,
-                                        primaryVariant: primaryVariantColor,
-                                        secondary: secondaryColor,
-                                        secondaryVariant: secondaryVariantColor
-                                    ),
-                                  );
-                                },
-                                child: const Text('Try me out!'),
+                                FlexSchemeData(
+                                  name: 'Midnight blue',
+                                  description: 'Midnight blue theme, custom definition of all colors',
+                                  light: FlexSchemeColor(
+                                      primary: primaryColor,
+                                      primaryVariant: primaryVariantColor,
+                                      secondary: secondaryColor,
+                                      secondaryVariant: secondaryVariantColor
+                                  ),
+                                  dark: FlexSchemeColor(
+                                      primary: primaryColor,
+                                      primaryVariant: primaryVariantColor,
+                                      secondary: secondaryColor,
+                                      secondaryVariant: secondaryVariantColor
+                                  ),
+                                );
+                              },
+                              child: const Text('Try me out!'),
                             )
                           ],
                         ),
                         isExpanded: isColorPickerExpanded,
+                        canTapOnHeader: true,
+                      ),
+                    ],
+                  ),
+                  ExpansionPanelList(
+                    animationDuration: const Duration(milliseconds: 600),
+                    expansionCallback: (panelIndex, isExpanded) {
+                      isToolsSetupExpanded = !isToolsSetupExpanded;
+                      setState(() {
+
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return const ListTile(
+                            title: Text('Tools Setup', style:
+                            TextStyle(color: Colors.black),
+                            ),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            SwitchListTile(
+                                title: const Text('Continuous Quality'),
+                                secondary: const Icon(Icons.search),
+                                value: isContinuousQualityEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isContinuousQualityEnabled = value;
+                                  });
+                                }
+                            ),
+                            if (isContinuousQualityEnabled)
+                              Column(
+                                children: [
+                                  SwitchListTile(
+                                      title: const Text('Token'),
+                                      secondary: const Icon(Icons.lock),
+                                      value: isContinuousQualityAuthTokenEnabled,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isContinuousQualityAuthTokenEnabled = value;
+                                        });
+                                      }
+                                  ),
+                                  TextFormField(
+                                    controller: continuousQualityURLTextController,
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Continuous Quality URL',
+                                    ),
+                                  ),
+                                  const Text('Leave token/credentials blank if '
+                                      'API '
+                                      'is public'),
+                                  if (isContinuousQualityAuthTokenEnabled)
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller: continuousQualityTokenTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Continuous Quality '
+                                                'Auth Token',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller: continuousQualityUsernameTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Continuous '
+                                                'Quality Username',
+                                          ),
+                                        ),
+                                        TextFormField(
+                                          controller: continuousQualityPasswordTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Continuous '
+                                                'Quality Password',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ],
+                              ),
+                            SwitchListTile(
+                                title: const Text('CI/CD'),
+                                secondary: const Icon(Icons.code),
+                                value: isCiCdEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isCiCdEnabled = value;
+                                  });
+                                }
+                            ),
+                            if (isCiCdEnabled)
+                              Column(
+                                children: [
+                                  SwitchListTile(
+                                      title: const Text('Token'),
+                                      secondary: const Icon(Icons.lock),
+                                      value: isCiCdAuthTokenEnabled,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isCiCdAuthTokenEnabled = value;
+                                        });
+                                      }
+                                  ),
+                                  TextFormField(
+                                    controller: ciCdURLTextController,
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                      hintText: 'CI/CD URL',
+                                    ),
+                                  ),
+                                  const Text('Leave token/credentials blank if '
+                                      'API '
+                                      'is public'),
+                                  if (isCiCdAuthTokenEnabled)
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller: ciCdTokenTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'CI/CD Auth Token',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller: ciCdUsernameTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'CI/CD Username',
+                                          ),
+                                        ),
+                                        TextFormField(
+                                          controller: ciCdPasswordTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'CI/CD Password',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ],
+                              ),
+                            SwitchListTile(
+                                title: const Text('Board/Kanban'),
+                                secondary: const Icon(Icons.book),
+                                value: isBoardKanbanEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isBoardKanbanEnabled = value;
+                                  });
+                                }
+                            ),
+                            if (isBoardKanbanEnabled)
+                              Column(
+                                children: [
+                                  SwitchListTile(
+                                      title: const Text('Token'),
+                                      secondary: const Icon(Icons.lock),
+                                      value: isBoardKanbanAuthTokenEnabled,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isBoardKanbanAuthTokenEnabled = value;
+                                        });
+                                      }
+                                  ),
+                                  TextFormField(
+                                    controller: boardKanbanURLTextController,
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Board/Kanban URL',
+                                    ),
+                                  ),
+                                  const Text('Leave token/credentials blank if '
+                                      'API '
+                                      'is public'),
+                                  if (isBoardKanbanAuthTokenEnabled)
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller:
+                                          boardKanbanTokenTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Board/Kanban Auth Token',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller: boardKanbanUsernameTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Board/Kanban Username',
+                                          ),
+                                        ),
+                                        TextFormField(
+                                          controller: boardKanbanPasswordTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Board/Kanban Password',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ],
+                              ),
+                            SwitchListTile(
+                                title: const Text('Testing'),
+                                secondary: const Icon(Icons.bug_report),
+                                value: isTestingEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isTestingEnabled = value;
+                                  });
+                                }
+                            ),
+                            if (isTestingEnabled)
+                              Column(
+                                children: [
+                                  SwitchListTile(
+                                      title: const Text('Token'),
+                                      secondary: const Icon(Icons.lock),
+                                      value: isTestingAuthTokenEnabled,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isTestingAuthTokenEnabled = value;
+                                        });
+                                      }
+                                  ),
+                                  TextFormField(
+                                    controller: testingURLTextController,
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Testing URL',
+                                    ),
+                                  ),
+                                  const Text('Leave token/credentials blank if '
+                                      'API '
+                                      'is public'),
+                                  if (isTestingAuthTokenEnabled)
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller:
+                                          testingTokenTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Testing Auth Token',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller:
+                                          testingUsernameTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Testing Username',
+                                          ),
+                                        ),
+                                        TextFormField(
+                                          controller:
+                                          testingPasswordTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Testing Password',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ],
+                              ),
+                            SwitchListTile(
+                                title: const Text('Messaging'),
+                                secondary: const Icon(Icons.message),
+                                value: isMessagingEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isMessagingEnabled = value;
+                                  });
+                                }
+                            ),
+                            if (isMessagingEnabled)
+                              Column(
+                                children: [
+                                  SwitchListTile(
+                                      title: const Text('Token'),
+                                      secondary: const Icon(Icons.lock),
+                                      value: isMessagingAuthTokenEnabled,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isMessagingAuthTokenEnabled = value;
+                                        });
+                                      }
+                                  ),
+                                  TextFormField(
+                                    controller: messagingURLTextController,
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Messaging URL',
+                                    ),
+                                  ),
+                                  const Text('Leave token/credentials blank if '
+                                      'API '
+                                      'is public'),
+                                  if (isMessagingAuthTokenEnabled)
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller:
+                                          messagingTokenTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Messaging Auth Token',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    Column(
+                                      children: [
+                                        TextFormField(
+                                          controller:
+                                          messagingUsernameTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Messaging Username',
+                                          ),
+                                        ),
+                                        TextFormField(
+                                          controller:
+                                          messagingPasswordTextController,
+                                          textAlign: TextAlign.center,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Messaging Password',
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ],
+                              ),
+                          ],
+                        ),
+                        isExpanded: isToolsSetupExpanded,
                         canTapOnHeader: true,
                       ),
                     ],
@@ -619,6 +1024,131 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           return;
                         }
 
+                        if (isContinuousQualityEnabled) {
+                          if (continuousQualityURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Continuous Quality URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(continuousQualityURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The Continuous Quality URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
+                        if (isCiCdEnabled) {
+                          if (ciCdURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('CI/CD URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(ciCdURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The CI/CD URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
+                        if (isBoardKanbanEnabled) {
+                          if (boardKanbanURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Board/Kanban URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(boardKanbanURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The Board/Kanban URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
+                        if (isTestingEnabled) {
+                          if (testingURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Messaging URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(testingURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The Messaging URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
+                        if (isMessagingEnabled) {
+                          if (messagingURLTextController.text.isEmpty) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('Messaging URL '
+                                        'cannot be empty if enabled'),
+                                  );
+                                });
+                            return;
+                          } else if (!isURL(messagingURLTextController.text,
+                              requireTld: false)) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Text('The Messaging URL is '
+                                        'invalid'),
+                                  );
+                                });
+                            return;
+                          }
+                        }
+
                         final companyCreationResponse = await http
                             .post(Uri.parse('https://qalenium-api.herokuapp.com/company/createCompany'),
                           headers: <String, String> {
@@ -627,19 +1157,23 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           body: jsonEncode(<String, String>{
                             'name': companyNameTextController.text,
                             'logo': base64Encode(File(_image.path).readAsBytesSync()),
-                            'flavourColor': '#000000',
                             'loginGit': isLoginUsingGithubEnabled.toString(),
                             'loginApple': isLoginUsingAppleEnabled.toString(),
                             'loginFacebook': isLoginUsingFacebookEnabled.toString(),
                             'loginEmail': isLoginUsingEmailEnabled.toString(),
-                            'primaryLightColor':primaryColor.hexCode,
-                            'primaryLightVariantColor':primaryVariantColor.hexCode,
-                            'secondaryLightColor':secondaryColor.hexCode,
-                            'secondaryLightVariantColor':secondaryVariantColor.hexCode,
-                            'primaryDarkColor':primaryColor.hexCode,
-                            'primaryDarkVariantColor':primaryVariantColor.hexCode,
-                            'secondaryDarkColor':secondaryColor.hexCode,
-                            'secondaryDarkVariantColor':secondaryVariantColor.hexCode,
+                            'primaryLightColor': primaryColor.hexCode,
+                            'primaryLightVariantColor': primaryVariantColor.hexCode,
+                            'secondaryLightColor': secondaryColor.hexCode,
+                            'secondaryLightVariantColor': secondaryVariantColor.hexCode,
+                            'primaryDarkColor': primaryColor.hexCode,
+                            'primaryDarkVariantColor': primaryVariantColor.hexCode,
+                            'secondaryDarkColor': secondaryColor.hexCode,
+                            'secondaryDarkVariantColor': secondaryVariantColor.hexCode,
+                            'continuousQualityUrl': Uri.encodeFull(continuousQualityURLTextController.text),
+                            'ciCdUrl': Uri.encodeFull(ciCdURLTextController.text),
+                            'boardKanbanUrl': Uri.encodeFull(boardKanbanURLTextController.text),
+                            'testingUrl': Uri.encodeFull(testingURLTextController.text),
+                            'messagingUrl': Uri.encodeFull(messagingURLTextController.text),
                           }),
                         );
 
