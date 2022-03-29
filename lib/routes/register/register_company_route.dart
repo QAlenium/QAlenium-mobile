@@ -631,7 +631,15 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                             'loginGit': isLoginUsingGithubEnabled.toString(),
                             'loginApple': isLoginUsingAppleEnabled.toString(),
                             'loginFacebook': isLoginUsingFacebookEnabled.toString(),
-                            'loginEmail': isLoginUsingEmailEnabled.toString()
+                            'loginEmail': isLoginUsingEmailEnabled.toString(),
+                            'primaryLightColor':primaryColor.hexCode,
+                            'primaryLightVariantColor':primaryVariantColor.hexCode,
+                            'secondaryLightColor':secondaryColor.hexCode,
+                            'secondaryLightVariantColor':secondaryVariantColor.hexCode,
+                            'primaryDarkColor':primaryColor.hexCode,
+                            'primaryDarkVariantColor':primaryVariantColor.hexCode,
+                            'secondaryDarkColor':secondaryColor.hexCode,
+                            'secondaryDarkVariantColor':secondaryVariantColor.hexCode,
                           }),
                         );
 
