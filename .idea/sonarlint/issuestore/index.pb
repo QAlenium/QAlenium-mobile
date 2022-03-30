@@ -11,7 +11,5 @@ C
 qalenium_mobile.iml,2/6/26f87ea0d84365f3903ad1c1d938afccb18c0f84
 T
 $lib/generated_plugin_registrant.dart,1/b/1be4a6b36b025841d630b388b6a83be28927674d
-Z
-*lib/routes/register/user_signup_route.dart,1/3/13022dacb470d5c0b45cbd4128334496c229054f
 J
 lib/routes/home_route.dart,9/6/96db6b877b166a918cacb08b01a454a26227fb99

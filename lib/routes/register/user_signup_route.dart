@@ -184,7 +184,7 @@ class _UserSignupPageState extends State<UserSignupPage> {
 
                           final response = await http
                               .post(Uri.parse('https://qalenium-api.herokuapp'
-                              '.com/user/signup'),
+                              '.com/user/signup/' + widget.company.companyId.toString()),
                             headers: <String, String> {
                               'Content-Type':'application/json; charset=UTF-8',
                             },
@@ -208,7 +208,6 @@ class _UserSignupPageState extends State<UserSignupPage> {
                                         'successfully'),
                                   );
                                 });
-
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
