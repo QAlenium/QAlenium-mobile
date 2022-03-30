@@ -122,7 +122,7 @@ class _UserSignupPageState extends State<UserSignupPage> {
                     ElevatedButton(
                         child: const Text('Register'),
                         onPressed: () async {
-                          
+
                           if (emailTextController.text.isEmpty ||
                               passwordTextController.text.isEmpty ||
                               rePasswordTextController.text.isEmpty) {
@@ -185,18 +185,18 @@ class _UserSignupPageState extends State<UserSignupPage> {
                           final response = await http
                               .post(Uri.parse('https://qalenium-api.herokuapp'
                               '.com/user/signup/' + widget.company.companyId.toString()),
-                            headers: <String, String> {
-                              'Content-Type':'application/json; charset=UTF-8',
-                            },
-                            body: jsonEncode(<String, String>{
-                              'email': emailTextController.text,
-                              'auth': sha512.convert(utf8.encode
-                                (emailTextController.text + ':' +
-                                  passwordTextController.text)).toString(),
-                              'companyId': widget.company.companyId.toString(),
-                              'deviceId': deviceUuid,
-                              'isAdmin': false.toString()
-                            })
+                              headers: <String, String> {
+                                'Content-Type':'application/json; charset=UTF-8',
+                              },
+                              body: jsonEncode(<String, String>{
+                                'email': emailTextController.text,
+                                'auth': sha512.convert(utf8.encode
+                                  (emailTextController.text + ':' +
+                                    passwordTextController.text)).toString(),
+                                'companyId': widget.company.companyId.toString(),
+                                'deviceId': deviceUuid,
+                                'isAdmin': false.toString()
+                              })
                           );
 
                           if (response.statusCode == 200) {
