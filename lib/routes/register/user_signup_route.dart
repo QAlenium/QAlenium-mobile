@@ -208,7 +208,6 @@ class _UserSignupPageState extends State<UserSignupPage> {
                                         'successfully'),
                                   );
                                 });
-
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
