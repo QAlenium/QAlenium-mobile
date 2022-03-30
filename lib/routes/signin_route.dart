@@ -2,6 +2,7 @@ import 'package:crypto/crypto.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:qalenium_mobile/models/user.dart';
 import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:qalenium_mobile/routes/home_route.dart';
 import 'package:qalenium_mobile/routes/register/user_signup_route.dart';
@@ -173,10 +174,17 @@ class _SignInPageState extends State<SignInPage> {
                                   );
 
                                   if (response.statusCode == 200) {
+                                    var user = User.fromJson(jsonDecode(response.body));
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) =>
-                                        HomeRoute(flexSchemeData: widget.flexSchemeData))
+                                            HomeRoute(
+                                              flexSchemeData: widget.flexSchemeData,
+                                              user: user,
+                                              company: widget.company,
+                                            )
+                                        )
                                     );
                                   } else {
                                     showDialog(
@@ -203,7 +211,7 @@ class _SignInPageState extends State<SignInPage> {
                                 context,
                                 MaterialPageRoute(builder: (context) =>
                                     UserSignupRoute(company: widget.company,
-                                      flexSchemeData: widget.flexSchemeData
+                                        flexSchemeData: widget.flexSchemeData
                                     ))
                             );
                           }

@@ -222,7 +222,7 @@
         <entry key="fl_chart">
           <value>
             <list>
-              <option value="/Applications/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.46.0/lib" />
+              <option value="/Applications/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.50.0/lib" />
             </list>
           </value>
         </entry>
@@ -701,7 +701,7 @@
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
-      <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.46.0/lib" />
+      <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.50.0/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flex_color_scheme-4.2.0/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_colorpicker-1.0.3/lib" />
       <root url="file:///Applications/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons_maker-0.10.2/lib" />
