@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -17,6 +18,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:validators/validators.dart';
+import 'package:flutter/services.dart';
 
 import '../../models/company.dart';
 
@@ -1150,6 +1152,11 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           }
                         }
 
+                        ByteData bytes = await rootBundle.load
+                          ('assets/qalenium_logo_white_background.png');
+                        var buffer = bytes.buffer;
+                        var base64Logo = base64.encode(Uint8List.view(buffer));
+
                         final companyCreationResponse = await http
                             .post(Uri.parse('https://qalenium-api.herokuapp.com/company/createCompany'),
                           headers: <String, String> {
@@ -1157,7 +1164,8 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           },
                           body: jsonEncode(<String, String>{
                             'name': companyNameTextController.text,
-                            'logo': base64Encode(File(_image.path).readAsBytesSync()),
+                            'logo': _image.path == '' ? base64Logo :
+                            base64Encode(File(_image.path).readAsBytesSync()),
                             'loginGit': isLoginUsingGithubEnabled.toString(),
                             'loginApple': isLoginUsingAppleEnabled.toString(),
                             'loginFacebook': isLoginUsingFacebookEnabled.toString(),
