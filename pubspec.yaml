@@ -41,7 +41,7 @@ dependencies:
   logging: ^1.0.2
   dart_code_metrics: ^4.12.0
   date_format: ^2.0.5
-  fl_chart: ^0.46.0
+  fl_chart: ^0.50.0
   email_validator: ^2.0.1
   device_info_plus: ^3.2.2
   image_picker: ^0.8.4+11
