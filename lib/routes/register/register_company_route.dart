@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qalenium_mobile/models/theme_showcase.dart';
 import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -566,26 +567,26 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                             ),
                             ElevatedButton(
                               onPressed: () async {
-
-                                FlexSchemeData(
-                                  name: 'Midnight blue',
-                                  description: 'Midnight blue theme, custom definition of all colors',
-                                  light: FlexSchemeColor(
-                                      primary: primaryColor,
-                                      primaryVariant: primaryVariantColor,
-                                      secondary: secondaryColor,
-                                      secondaryVariant: secondaryVariantColor
-                                  ),
-                                  dark: FlexSchemeColor(
-                                      primary: primaryColor,
-                                      primaryVariant: primaryVariantColor,
-                                      secondary: secondaryColor,
-                                      secondaryVariant: secondaryVariantColor
-                                  ),
-                                );
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                          content: SingleChildScrollView(
+                                              child: Theme(
+                                                child: const ThemeShowcase(),
+                                                data: FlexThemeData.light(
+                                                  primary: primaryColor,
+                                                  primaryVariant: primaryVariantColor,
+                                                  secondary: secondaryColor,
+                                                  secondaryVariant: secondaryVariantColor,
+                                                ),
+                                              )
+                                          )
+                                      );
+                                    });
                               },
                               child: const Text('Try me out!'),
-                            )
+                            ),
                           ],
                         ),
                         isExpanded: isColorPickerExpanded,

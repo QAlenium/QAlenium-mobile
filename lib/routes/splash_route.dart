@@ -88,6 +88,7 @@ class SplashRoute extends StatelessWidget {
             secondary: _myFlexScheme.dark.secondary,
             secondaryVariant: _myFlexScheme.dark.secondaryVariant,
           ),
+          themeMode: ThemeMode.system,
           home: SplashPage(title: 'Splash Page', flexSchemeData: _myFlexScheme),
         );
       },
