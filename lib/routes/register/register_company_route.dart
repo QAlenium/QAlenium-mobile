@@ -1213,7 +1213,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
                             final userResponse = await http
                                 .post(Uri.parse('https://qalenium-api.herokuapp'
-                                '.com/user/signup'),
+                                '.com/user/signup/' + companies[0].companyId.toString()),
                                 headers: <String, String> {
                                   'Content-Type':'application/json; charset=UTF-8',
                                 },
