@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/routes/register/register_company_route.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:qalenium_mobile/routes/signin_route.dart';
+import 'package:qalenium_mobile/routes/pre_login/signin_route.dart';
 
-import '../models/company.dart';
+import '../../models/company.dart';
 
 class CompaniesRoute extends StatelessWidget {
   const CompaniesRoute({Key? key, required this.flexSchemeData}) : super(key:

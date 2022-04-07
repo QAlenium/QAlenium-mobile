@@ -3,14 +3,14 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/models/user.dart';
-import 'package:qalenium_mobile/routes/companies_route.dart';
-import 'package:qalenium_mobile/routes/home_route.dart';
-import 'package:qalenium_mobile/routes/register/user_signup_route.dart';
+import 'package:qalenium_mobile/routes/pre_login/companies_route.dart';
+import 'package:qalenium_mobile/routes/pre_login/home_route.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../models/company.dart';
+import '../../models/company.dart';
+import '../register/user_signup_route.dart';
 
 class SignInRoute extends StatelessWidget {
   const SignInRoute({Key? key, required this.company, required this.flexSchemeData}) :

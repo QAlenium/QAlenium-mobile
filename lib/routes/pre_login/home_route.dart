@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/models/company.dart';
 import 'package:qalenium_mobile/models/user.dart';
 
-import '../models/nav_bar.dart';
+import '../../models/nav_bar.dart';
 
 class HomeRoute extends StatelessWidget {
   const HomeRoute({Key? key, required this.flexSchemeData, required this

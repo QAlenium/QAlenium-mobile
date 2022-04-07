@@ -6,8 +6,8 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_launcher_icons_maker/utils.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:qalenium_mobile/routes/companies_route.dart';
-import 'package:qalenium_mobile/routes/signin_route.dart';
+import 'package:qalenium_mobile/routes/pre_login/companies_route.dart';
+import 'package:qalenium_mobile/routes/pre_login/signin_route.dart';
 
 import 'models/company.dart';
 import 'package:http/http.dart' as http;
