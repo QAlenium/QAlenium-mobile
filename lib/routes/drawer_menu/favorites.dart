@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/models/company.dart';
 import 'package:qalenium_mobile/models/user.dart';
 
-import '../../models/nav_bar.dart';
+import '../widgets/nav_bar.dart';
 
 class FavoritesRoute extends StatelessWidget {
   const FavoritesRoute({Key? key, required this.flexSchemeData, required this

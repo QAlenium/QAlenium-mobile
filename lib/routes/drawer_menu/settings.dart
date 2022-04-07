@@ -2,7 +2,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/company.dart';
-import '../../models/nav_bar.dart';
+import '../widgets/nav_bar.dart';
 import '../../models/user.dart';
 
 class SettingsRoute extends StatelessWidget {
