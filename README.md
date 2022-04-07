@@ -5,13 +5,15 @@
 ![CircleCI](https://img.shields.io/circleci/build/github/QAlenium/flutter_app/main)
 
 # QAlenium Flutter app
+#### See also our [API](https://github.com/QAlenium/QAlenium-api) and [Wearable](https://github.com/QAlenium/QAlenium-wearable) repositories
 A powerful & easy to use flutter (Android and iOS) app to manage your software integrations!
 
-### To access SonarCloud data use this link:
-#### https://sonarcloud.io/dashboard?id=QAlenium_flutter_app
-
-### To access pipeline and CI data use this link:
-#### https://circleci.com/gh/QAlenium/QAlenium_flutter_app
+#### To access SonarCloud data use [this link](https://sonarcloud.io/dashboard?id=QAlenium_flutter_app)
+#### To access the pipeline and CI data use [this link](https://circleci.com/gh/QAlenium/QAlenium_flutter_app)
+#### To access the non-functional test data use [this link](https://blazemeter.com/QAlenium_flutter_app)
+#### To access the functional test data use [this link](https://cypress.com/)
+#### To access the project board use [this link](https://github.com/orgs/QAlenium/projects/3)
+#### To join our community in Slack use [this link](https://join.slack.com/t/qalenium/shared_invite/zt-c8l77uhz-80rRWRHCwb4mk82rW9cV7w)
 
 ## Table of Contents
 1. [Quick Start](#quick-start)
