@@ -451,6 +451,16 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                         body: Column(
                           children: [
                             SwitchListTile(
+                                title: const Text('Login using Email'),
+                                secondary: const Icon(Icons.email),
+                                value: isLoginUsingEmailEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isLoginUsingEmailEnabled = value;
+                                  });
+                                }
+                            ),
+                            SwitchListTile(
                                 title: const Text('Login using GitHub'),
                                 secondary: const Icon(Icons.code),
                                 value: isLoginUsingGithubEnabled,
@@ -477,16 +487,6 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                                 onChanged: (value) {
                                   setState(() {
                                     isLoginUsingFacebookEnabled = value;
-                                  });
-                                }
-                            ),
-                            SwitchListTile(
-                                title: const Text('Login using Email'),
-                                secondary: const Icon(Icons.email),
-                                value: isLoginUsingEmailEnabled,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isLoginUsingEmailEnabled = value;
                                   });
                                 }
                             ),
