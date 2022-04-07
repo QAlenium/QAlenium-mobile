@@ -9,7 +9,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:qalenium_mobile/routes/companies_route.dart';
 import 'package:qalenium_mobile/routes/signin_route.dart';
 
-import '../models/company.dart';
+import 'models/company.dart';
 import 'package:http/http.dart' as http;
 
 late http.Response response;
