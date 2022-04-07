@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qalenium_mobile/models/theme_showcase.dart';
-import 'package:qalenium_mobile/routes/pre_login/companies_route.dart';
+import 'package:qalenium_mobile/routes/pre_login/companies.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;

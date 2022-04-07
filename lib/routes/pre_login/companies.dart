@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:qalenium_mobile/routes/register/register_company_route.dart';
+import 'package:qalenium_mobile/routes/register/register_company.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:qalenium_mobile/routes/pre_login/signin_route.dart';
+import 'package:qalenium_mobile/routes/pre_login/signin.dart';
 
 import '../../models/company.dart';
 
