@@ -8,12 +8,14 @@
 #### See also our [API](https://github.com/QAlenium/QAlenium-api) and [Wearable](https://github.com/QAlenium/QAlenium-wearable) repositories
 A powerful & easy to use flutter (Android and iOS) app to manage your software integrations!
 
+#### To access our PaaS (Server) access [this link](https://heroku.com/dashboard?id=QAlenium)
 #### To access SonarCloud data use [this link](https://sonarcloud.io/dashboard?id=QAlenium_flutter_app)
 #### To access the pipeline and CI data use [this link](https://circleci.com/gh/QAlenium/QAlenium_flutter_app)
 #### To access the non-functional test data use [this link](https://blazemeter.com/QAlenium_flutter_app)
 #### To access the functional test data use [this link](https://cypress.com/)
 #### To access the project board use [this link](https://github.com/orgs/QAlenium/projects/3)
 #### To join our community in Slack use [this link](https://join.slack.com/t/qalenium/shared_invite/zt-c8l77uhz-80rRWRHCwb4mk82rW9cV7w)
+#### To access the project's raw content use [this link](https://github.com/orgs/QAlenium/raw-content)
 
 ## Table of Contents
 1. [Quick Start](#quick-start)
@@ -25,6 +27,22 @@ A powerful & easy to use flutter (Android and iOS) app to manage your software i
 
 <h2 id="quick-start">Quick Start :chart_with_upwards_trend:</h2>
 Download this app in the Android/iOS app store or fork this project to do your modifications.
+
+### Mobile and Wearable
+We’re using Flutter (Dart language) since we’ll need to develop only once for Android, iOS, Web and Wearable platforms.
+
+In order to develop/test using Apple Simulator/Android Emulator, you’ll need to Install IntelliJ (or Android Studio) 
+and setup Xcode command line tools (if a mac user):
+
+1. Install IntelliJ or Android studio > Preferences > Android SDK > Configure it.
+2. Install Xcode > Preferences > Locations > Select command line tools.
+
+> Selecting this command line tools will enable the option to run tests/develop against Simulator in IntelliJ/Android 
+> Studio. Setting Android SDK up will enable the option to run tests/develop against Emulator  in IntelliJ/Android 
+> Studio.
+
+### Unit testing
+All unit tests are being run against a Heroku machine as it is our PaaS.
 
 <br/>
 
