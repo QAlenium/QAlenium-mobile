@@ -8,8 +8,8 @@ import 'package:qalenium_mobile/models/user.dart';
 
 import '../../models/nav_bar.dart';
 
-class HomeRoute extends StatelessWidget {
-  const HomeRoute({Key? key, required this.flexSchemeData, required this
+class FavoritesRoute extends StatelessWidget {
+  const FavoritesRoute({Key? key, required this.flexSchemeData, required this
       .company, required this.user}) : super(key: key);
 
   final FlexSchemeData flexSchemeData;
@@ -19,7 +19,7 @@ class HomeRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Home',
+      title: 'Favorite',
       theme: FlexThemeData.light(
         primary: flexSchemeData.light.primary,
         primaryVariant: flexSchemeData.light.primaryVariant,
@@ -34,7 +34,7 @@ class HomeRoute extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       home: HomePage(
-          title: 'Home Page',
+          title: 'Favorite Page',
           flexSchemeData: flexSchemeData,
           user: user,
           company: company

@@ -4,7 +4,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/models/user.dart';
 import 'package:qalenium_mobile/routes/pre_login/companies.dart';
-import 'package:qalenium_mobile/routes/pre_login/home.dart';
+import 'package:qalenium_mobile/routes/drawer_menu/favorites.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -179,7 +179,7 @@ class _SignInPageState extends State<SignInPage> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) =>
-                                            HomeRoute(
+                                            FavoritesRoute(
                                               flexSchemeData: widget.flexSchemeData,
                                               user: user,
                                               company: widget.company,
