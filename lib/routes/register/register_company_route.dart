@@ -18,7 +18,6 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:validators/validators.dart';
-import 'package:flutter/services.dart';
 
 import '../../models/company.dart';
 
@@ -352,6 +351,20 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CompaniesRoute(flexSchemeData: widget.flexSchemeData)
+                )
+            );
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+        ),
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
       ),
