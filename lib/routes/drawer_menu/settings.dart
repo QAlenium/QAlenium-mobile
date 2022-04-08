@@ -35,7 +35,7 @@ class SettingsRoute extends StatelessWidget {
   final User user;
   final Company company;
   final FlexSchemeData flexSchemeData;
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
