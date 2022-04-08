@@ -2,6 +2,8 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:qalenium_mobile/models/company.dart';
 import 'package:qalenium_mobile/models/user.dart';
+import 'package:qalenium_mobile/routes/drawer_menu/favorites.dart';
+import 'package:qalenium_mobile/routes/drawer_menu/settings.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({Key? key, required this.flexSchemeData, required this.user,
@@ -41,7 +43,15 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.favorite),
             title: const Text('Favorites'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FavoritesRoute(
+                        flexSchemeData: flexSchemeData,
+                        company: company,
+                        user: user)
+                )
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.search),
@@ -72,7 +82,18 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
-            onTap: () => Navigator.pop(context),
+            onTap: () =>
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SettingsRoute(
+                              flexSchemeData: flexSchemeData,
+                              company: company,
+                              user: user,
+                            )
+                    )
+                ),
           ),
           ListTile(
             leading: const Icon(Icons.notifications),
