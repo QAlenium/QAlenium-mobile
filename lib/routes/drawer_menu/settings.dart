@@ -6,13 +6,16 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:qalenium_mobile/models/theme_showcase.dart';
+import 'package:qalenium_mobile/models/chart_card.dart';
+import 'package:qalenium_mobile/routes/widgets/theme_showcase.dart';
 import 'package:qalenium_mobile/routes/drawer_menu/favorites.dart';
 import 'package:qalenium_mobile/routes/pre_login/companies.dart';
 import 'package:path_provider/path_provider.dart';
@@ -128,6 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isAdminSetupExpanded = false;
   bool isColorPickerExpanded = false;
   bool isToolsSetupExpanded = false;
+  bool isChartSetupExpanded = false;
   bool isContinuousQualityEnabled = false;
   bool isCiCdEnabled = false;
   bool isBoardKanbanEnabled = false;
@@ -140,7 +144,9 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isMessagingAuthTokenEnabled = false;
 
   int selectedRadio = 1;
+  int touchedIndex = -1;
   String? _retrieveDataError;
+  List<ChartCard> charts = [];
 
   void updatePrimaryColor(Color color) {
     setState(() => primaryColor = color);
@@ -343,9 +349,211 @@ class _SettingsPageState extends State<SettingsPage> {
         });
   }
 
+  BarChartData mainBarData() {
+    return BarChartData(
+      barTouchData: BarTouchData(
+        touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: Colors.blueGrey,
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              String weekDay;
+              switch (group.x.toInt()) {
+                case 0:
+                  weekDay = 'Monday';
+                  break;
+                case 1:
+                  weekDay = 'Tuesday';
+                  break;
+                case 2:
+                  weekDay = 'Wednesday';
+                  break;
+                case 3:
+                  weekDay = 'Thursday';
+                  break;
+                case 4:
+                  weekDay = 'Friday';
+                  break;
+                case 5:
+                  weekDay = 'Saturday';
+                  break;
+                case 6:
+                  weekDay = 'Sunday';
+                  break;
+                default:
+                  throw Error();
+              }
+              return BarTooltipItem(
+                weekDay + '\n',
+                const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: (rod.toY - 1).toString(),
+                    style: const TextStyle(
+                      color: Colors.yellow,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              );
+            }),
+        touchCallback: (FlTouchEvent event, barTouchResponse) {
+          setState(() {
+            if (!event.isInterestedForInteractions ||
+                barTouchResponse == null ||
+                barTouchResponse.spot == null) {
+              touchedIndex = -1;
+              return;
+            }
+            touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
+          });
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: getTitles,
+            reservedSize: 38,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(
+        show: false,
+      ),
+      barGroups: showingGroups(),
+      gridData: FlGridData(show: false),
+    );
+  }
+
+  Widget getTitles(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+    );
+    Widget text;
+    switch (value.toInt()) {
+      case 0:
+        text = const Text('M', style: style);
+        break;
+      case 1:
+        text = const Text('T', style: style);
+        break;
+      case 2:
+        text = const Text('W', style: style);
+        break;
+      case 3:
+        text = const Text('T', style: style);
+        break;
+      case 4:
+        text = const Text('F', style: style);
+        break;
+      case 5:
+        text = const Text('S', style: style);
+        break;
+      case 6:
+        text = const Text('S', style: style);
+        break;
+      default:
+        text = const Text('', style: style);
+        break;
+    }
+    return Padding(padding: const EdgeInsets.only(top: 16), child: text);
+  }
+
+  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+    switch (i) {
+      case 0:
+        return makeGroupData(0, 5, isTouched: i == touchedIndex);
+      case 1:
+        return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+      case 2:
+        return makeGroupData(2, 5, isTouched: i == touchedIndex);
+      case 3:
+        return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+      case 4:
+        return makeGroupData(4, 9, isTouched: i == touchedIndex);
+      case 5:
+        return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+      case 6:
+        return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+      default:
+        return throw Error();
+    }
+  });
+
+  BarChartGroupData makeGroupData(
+      int x,
+      double y, {
+        bool isTouched = false,
+        Color barColor = Colors.white,
+        double width = 22,
+        List<int> showTooltips = const [],
+      }) {
+    return BarChartGroupData(
+      x: x,
+      barRods: [
+        BarChartRodData(
+          toY: isTouched ? y + 1 : y,
+          color: isTouched ? Colors.yellow : barColor,
+          width: width,
+          borderSide: isTouched
+              ? BorderSide(color: Colors.yellow.darken(), width: 1)
+              : const BorderSide(color: Colors.white, width: 0),
+          backDrawRodData: BackgroundBarChartRodData(
+            show: true,
+            toY: 20,
+            color: primaryColor,
+          ),
+        ),
+      ],
+      showingTooltipIndicators: showTooltips,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+
+    var pieChartCard = ChartCard(title: "Pie Chart",
+      isSelected: false,
+      chartType: "pie",
+    );
+
+    var horizontalBarChartCard = ChartCard(title: "Bar Chart",
+      isSelected: false,
+      chartType: "bar",
+    );
+
+    var verticalBarChartCard = ChartCard(title: "Radar Chart",
+      isSelected: false,
+      chartType: "radar",
+    );
+
+    var lineChartCard = ChartCard(title: "Line Chart",
+      isSelected: false,
+      chartType: "line",
+    );
+
+    charts = [pieChartCard, horizontalBarChartCard, verticalBarChartCard,
+      lineChartCard];
+
     _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
     isLoginUsingGithubEnabled = widget.company.loginGit;
     isLoginUsingAppleEnabled = widget.company.loginApple;
@@ -591,6 +799,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                         body: Column(
                           children: [
+                            const Text("Create admin account"),
                             TextFormField(
                               controller: emailTextController,
                               decoration: const InputDecoration(
@@ -1051,6 +1260,752 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ],
                   ),
+                  ExpansionPanelList(
+                    animationDuration: const Duration(milliseconds: 600),
+                    expansionCallback: (panelIndex, isExpanded) {
+                      isChartSetupExpanded = !isChartSetupExpanded;
+                      setState(() {
+
+                      });
+                    },
+                    children: [
+                      ExpansionPanel(
+                        headerBuilder: (context, isExpanded) {
+                          return const ListTile(
+                            title: Text('Charts Setup', style:
+                            TextStyle(color: Colors.black),
+                            ),
+                          );
+                        },
+                        body: Column(
+                          children: [
+                            if (isContinuousQualityEnabled) Column(
+                              children: [
+                                const Text("Select Quality Chart Type"),
+                                GridView.builder(
+                                  shrinkWrap: true,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2
+                                  ),
+                                  itemCount: 4,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () => {
+
+                                      },
+                                      child: AspectRatio(
+                                        aspectRatio: 5,
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                                          color: primaryColor,
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.all(30.0),
+                                                child: charts[index].chartType == "pie" ?
+                                                PieChart(
+                                                  PieChartData(
+                                                    sections: List.filled(5,
+                                                        PieChartSectionData(value: 1.0)),
+                                                    pieTouchData: PieTouchData(),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "line" ? LineChart(
+                                                  LineChartData(
+                                                    lineBarsData: List.filled(1,
+                                                        LineChartBarData(
+                                                            spots: [
+                                                              const FlSpot(1.0, 2.0),
+                                                              const FlSpot(2.0, 5.0),
+                                                              const FlSpot(3.0, 3.0),
+                                                              const FlSpot(4.0, 4.0),
+                                                              const FlSpot(5.0, 3.0),
+                                                            ])),
+                                                    lineTouchData: LineTouchData(
+                                                        touchTooltipData: LineTouchTooltipData()
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "bar"
+                                                    ? BarChart(
+                                                  BarChartData(
+                                                    barTouchData: BarTouchData(
+                                                        touchTooltipData: BarTouchTooltipData(
+
+                                                        )
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    barGroups: List.generate(3,
+                                                            (i) {
+                                                          switch (i) {
+                                                            case 0:
+                                                              return makeGroupData(0, 3, isTouched: i == touchedIndex);
+                                                            case 1:
+                                                              return makeGroupData(1, 17, isTouched: i == touchedIndex);
+                                                            case 2:
+                                                              return makeGroupData(2, 8, isTouched: i == touchedIndex);
+                                                            default:
+                                                              return throw Error();
+                                                          }
+                                                        }),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : RadarChart(
+                                                  RadarChartData(
+                                                    borderData: FlBorderData(show: false),
+                                                    dataSets: [
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 2.0))
+                                                      ),
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 7.0))
+                                                      ),
+                                                      RadarDataSet(dataEntries: List.filled(5, const RadarEntry(value: 4.0))
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                                        child: Padding(
+                                                          padding: const
+                                                          EdgeInsets.all(0.0),
+                                                          child: Align(
+                                                            alignment: Alignment.topRight,
+                                                            child: IconButton(
+                                                              icon:
+                                                              charts[index]
+                                                                  .isSelected ?
+                                                              const Icon(Icons
+                                                                  .check_circle) : const
+                                                              Icon(Icons
+                                                                  .radio_button_unchecked),
+                                                              color: const Color(0xff0f4a3c),
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  if (charts[index].isSelected) {
+                                                                    charts[index].isSelected = false;
+                                                                  } else {
+                                                                    charts[index].isSelected = true;
+                                                                  }
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                            if (isCiCdEnabled) Column(
+                              children: [
+                                const Text("Select CI/CD Chart Type"),
+                                GridView.builder(
+                                  shrinkWrap: true,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2
+                                  ),
+                                  itemCount: 4,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () => {
+
+                                      },
+                                      child: AspectRatio(
+                                        aspectRatio: 5,
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                                          color: primaryColor,
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.all(30.0),
+                                                child: charts[index].chartType == "pie" ?
+                                                PieChart(
+                                                  PieChartData(
+                                                    sections: List.filled(5,
+                                                        PieChartSectionData(value: 1.0)),
+                                                    pieTouchData: PieTouchData(),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "line" ? LineChart(
+                                                  LineChartData(
+                                                    lineBarsData: List.filled(1,
+                                                        LineChartBarData(
+                                                            spots: [
+                                                              const FlSpot(1.0, 2.0),
+                                                              const FlSpot(2.0, 5.0),
+                                                              const FlSpot(3.0, 3.0),
+                                                              const FlSpot(4.0, 4.0),
+                                                              const FlSpot(5.0, 3.0),
+                                                            ])),
+                                                    lineTouchData: LineTouchData(
+                                                        touchTooltipData: LineTouchTooltipData()
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "bar"
+                                                    ? BarChart(
+                                                  BarChartData(
+                                                    barTouchData: BarTouchData(
+                                                        touchTooltipData: BarTouchTooltipData(
+
+                                                        )
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    barGroups: List.generate(3,
+                                                            (i) {
+                                                          switch (i) {
+                                                            case 0:
+                                                              return makeGroupData(0, 3, isTouched: i == touchedIndex);
+                                                            case 1:
+                                                              return makeGroupData(1, 17, isTouched: i == touchedIndex);
+                                                            case 2:
+                                                              return makeGroupData(2, 8, isTouched: i == touchedIndex);
+                                                            default:
+                                                              return throw Error();
+                                                          }
+                                                        }),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : RadarChart(
+                                                  RadarChartData(
+                                                    borderData: FlBorderData(show: false),
+                                                    dataSets: [
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 2.0))
+                                                      ),
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 7.0))
+                                                      ),
+                                                      RadarDataSet(dataEntries: List.filled(5, const RadarEntry(value: 4.0))
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                                        child: Padding(
+                                                          padding: const
+                                                          EdgeInsets.all(0.0),
+                                                          child: Align(
+                                                            alignment: Alignment.topRight,
+                                                            child: IconButton(
+                                                              icon:
+                                                              charts[index]
+                                                                  .isSelected ?
+                                                              const Icon(Icons
+                                                                  .check_circle) : const
+                                                              Icon(Icons
+                                                                  .radio_button_unchecked),
+                                                              color: const Color(0xff0f4a3c),
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  if (charts[index].isSelected) {
+                                                                    charts[index].isSelected = false;
+                                                                  } else {
+                                                                    charts[index].isSelected = true;
+                                                                  }
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                            if (isBoardKanbanEnabled) Column(
+                              children: [
+                                const Text("Select Board/Kanban Chart Type"),
+                                GridView.builder(
+                                  shrinkWrap: true,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2
+                                  ),
+                                  itemCount: 4,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () => {
+
+                                      },
+                                      child: AspectRatio(
+                                        aspectRatio: 5,
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                                          color: primaryColor,
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.all(30.0),
+                                                child: charts[index].chartType == "pie" ?
+                                                PieChart(
+                                                  PieChartData(
+                                                    sections: List.filled(5,
+                                                        PieChartSectionData(value: 1.0)),
+                                                    pieTouchData: PieTouchData(),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "line" ? LineChart(
+                                                  LineChartData(
+                                                    lineBarsData: List.filled(1,
+                                                        LineChartBarData(
+                                                            spots: [
+                                                              const FlSpot(1.0, 2.0),
+                                                              const FlSpot(2.0, 5.0),
+                                                              const FlSpot(3.0, 3.0),
+                                                              const FlSpot(4.0, 4.0),
+                                                              const FlSpot(5.0, 3.0),
+                                                            ])),
+                                                    lineTouchData: LineTouchData(
+                                                        touchTooltipData: LineTouchTooltipData()
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "bar"
+                                                    ? BarChart(
+                                                  BarChartData(
+                                                    barTouchData: BarTouchData(
+                                                        touchTooltipData: BarTouchTooltipData(
+
+                                                        )
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    barGroups: List.generate(3,
+                                                            (i) {
+                                                          switch (i) {
+                                                            case 0:
+                                                              return makeGroupData(0, 3, isTouched: i == touchedIndex);
+                                                            case 1:
+                                                              return makeGroupData(1, 17, isTouched: i == touchedIndex);
+                                                            case 2:
+                                                              return makeGroupData(2, 8, isTouched: i == touchedIndex);
+                                                            default:
+                                                              return throw Error();
+                                                          }
+                                                        }),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : RadarChart(
+                                                  RadarChartData(
+                                                    borderData: FlBorderData(show: false),
+                                                    dataSets: [
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 2.0))
+                                                      ),
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 7.0))
+                                                      ),
+                                                      RadarDataSet(dataEntries: List.filled(5, const RadarEntry(value: 4.0))
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                                        child: Padding(
+                                                          padding: const
+                                                          EdgeInsets.all(0.0),
+                                                          child: Align(
+                                                            alignment: Alignment.topRight,
+                                                            child: IconButton(
+                                                              icon:
+                                                              charts[index]
+                                                                  .isSelected ?
+                                                              const Icon(Icons
+                                                                  .check_circle) : const
+                                                              Icon(Icons
+                                                                  .radio_button_unchecked),
+                                                              color: const Color(0xff0f4a3c),
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  if (charts[index].isSelected) {
+                                                                    charts[index].isSelected = false;
+                                                                  } else {
+                                                                    charts[index].isSelected = true;
+                                                                  }
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                            if (isTestingEnabled) Column(
+                              children: [
+                                const Text("Select Testing Chart Type"),
+                                GridView.builder(
+                                  shrinkWrap: true,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2
+                                  ),
+                                  itemCount: 4,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () => {
+
+                                      },
+                                      child: AspectRatio(
+                                        aspectRatio: 5,
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                                          color: primaryColor,
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.all(30.0),
+                                                child: charts[index].chartType == "pie" ?
+                                                PieChart(
+                                                  PieChartData(
+                                                    sections: List.filled(5,
+                                                        PieChartSectionData(value: 1.0)),
+                                                    pieTouchData: PieTouchData(),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "line" ? LineChart(
+                                                  LineChartData(
+                                                    lineBarsData: List.filled(1,
+                                                        LineChartBarData(
+                                                            spots: [
+                                                              const FlSpot(1.0, 2.0),
+                                                              const FlSpot(2.0, 5.0),
+                                                              const FlSpot(3.0, 3.0),
+                                                              const FlSpot(4.0, 4.0),
+                                                              const FlSpot(5.0, 3.0),
+                                                            ])),
+                                                    lineTouchData: LineTouchData(
+                                                        touchTooltipData: LineTouchTooltipData()
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "bar"
+                                                    ? BarChart(
+                                                  BarChartData(
+                                                    barTouchData: BarTouchData(
+                                                        touchTooltipData: BarTouchTooltipData(
+
+                                                        )
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    barGroups: List.generate(3,
+                                                            (i) {
+                                                          switch (i) {
+                                                            case 0:
+                                                              return makeGroupData(0, 3, isTouched: i == touchedIndex);
+                                                            case 1:
+                                                              return makeGroupData(1, 17, isTouched: i == touchedIndex);
+                                                            case 2:
+                                                              return makeGroupData(2, 8, isTouched: i == touchedIndex);
+                                                            default:
+                                                              return throw Error();
+                                                          }
+                                                        }),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : RadarChart(
+                                                  RadarChartData(
+                                                    borderData: FlBorderData(show: false),
+                                                    dataSets: [
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 2.0))
+                                                      ),
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 7.0))
+                                                      ),
+                                                      RadarDataSet(dataEntries: List.filled(5, const RadarEntry(value: 4.0))
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                                        child: Padding(
+                                                          padding: const
+                                                          EdgeInsets.all(0.0),
+                                                          child: Align(
+                                                            alignment: Alignment.topRight,
+                                                            child: IconButton(
+                                                              icon:
+                                                              charts[index]
+                                                                  .isSelected ?
+                                                              const Icon(Icons
+                                                                  .check_circle) : const
+                                                              Icon(Icons
+                                                                  .radio_button_unchecked),
+                                                              color: const Color(0xff0f4a3c),
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  if (charts[index].isSelected) {
+                                                                    charts[index].isSelected = false;
+                                                                  } else {
+                                                                    charts[index].isSelected = true;
+                                                                  }
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                            if (isMessagingEnabled) Column(
+                              children: [
+                                const Text("Select Messaging Chart type"),
+                                GridView.builder(
+                                  shrinkWrap: true,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2
+                                  ),
+                                  itemCount: 4,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () => {
+
+                                      },
+                                      child: AspectRatio(
+                                        aspectRatio: 5,
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                                          color: primaryColor,
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.all(30.0),
+                                                child: charts[index].chartType == "pie" ?
+                                                PieChart(
+                                                  PieChartData(
+                                                    sections: List.filled(5,
+                                                        PieChartSectionData(value: 1.0)),
+                                                    pieTouchData: PieTouchData(),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "line" ? LineChart(
+                                                  LineChartData(
+                                                    lineBarsData: List.filled(1,
+                                                        LineChartBarData(
+                                                            spots: [
+                                                              const FlSpot(1.0, 2.0),
+                                                              const FlSpot(2.0, 5.0),
+                                                              const FlSpot(3.0, 3.0),
+                                                              const FlSpot(4.0, 4.0),
+                                                              const FlSpot(5.0, 3.0),
+                                                            ])),
+                                                    lineTouchData: LineTouchData(
+                                                        touchTooltipData: LineTouchTooltipData()
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : charts[index].chartType == "bar"
+                                                    ? BarChart(
+                                                  BarChartData(
+                                                    barTouchData: BarTouchData(
+                                                        touchTooltipData: BarTouchTooltipData(
+
+                                                        )
+                                                    ),
+                                                    titlesData: FlTitlesData(
+                                                        show: false
+                                                    ),
+                                                    barGroups: List.generate(3,
+                                                            (i) {
+                                                          switch (i) {
+                                                            case 0:
+                                                              return makeGroupData(0, 3, isTouched: i == touchedIndex);
+                                                            case 1:
+                                                              return makeGroupData(1, 17, isTouched: i == touchedIndex);
+                                                            case 2:
+                                                              return makeGroupData(2, 8, isTouched: i == touchedIndex);
+                                                            default:
+                                                              return throw Error();
+                                                          }
+                                                        }),
+                                                    gridData: FlGridData(show: false),
+                                                    borderData: FlBorderData(show: false),
+                                                  ),
+                                                ) : RadarChart(
+                                                  RadarChartData(
+                                                    borderData: FlBorderData(show: false),
+                                                    dataSets: [
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 2.0))
+                                                      ),
+                                                      RadarDataSet(
+                                                          dataEntries: List.filled(5, const RadarEntry(value: 7.0))
+                                                      ),
+                                                      RadarDataSet(dataEntries: List.filled(5, const RadarEntry(value: 4.0))
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  children: <Widget>[
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                                        child: Padding(
+                                                          padding: const
+                                                          EdgeInsets.all(0.0),
+                                                          child: Align(
+                                                            alignment: Alignment.topRight,
+                                                            child: IconButton(
+                                                              icon:
+                                                              charts[index]
+                                                                  .isSelected ?
+                                                              const Icon(Icons
+                                                                  .check_circle) : const
+                                                              Icon(Icons
+                                                                  .radio_button_unchecked),
+                                                              color: const Color(0xff0f4a3c),
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  if (charts[index].isSelected) {
+                                                                    charts[index].isSelected = false;
+                                                                  } else {
+                                                                    charts[index].isSelected = true;
+                                                                  }
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        isExpanded: isChartSetupExpanded,
+                        canTapOnHeader: true,
+                      ),
+                    ],
+                  ),
                   ElevatedButton(
                       child: const Text('Update'),
                       onPressed: () async {
@@ -1345,7 +2300,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               });
                         }
                       }
-                  )
+                  ),
                 ],
               ),
             )),
