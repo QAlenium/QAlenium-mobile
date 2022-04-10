@@ -1,27 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:qalenium_mobile/models/chart_card.dart';
-import 'package:qalenium_mobile/routes/widgets/theme_showcase.dart';
-import 'package:qalenium_mobile/routes/drawer_menu/favorites.dart';
-import 'package:qalenium_mobile/routes/pre_login/companies.dart';
-import 'package:path_provider/path_provider.dart';
-
 import 'package:http/http.dart' as http;
+import 'package:qalenium_mobile/models/chart_card.dart';
 import 'package:qalenium_mobile/routes/widgets/nav_bar.dart';
+import 'package:qalenium_mobile/routes/widgets/theme_showcase.dart';
 import 'package:validators/validators.dart';
 
 import '../../models/company.dart';
@@ -80,8 +70,6 @@ class SettingsPage extends StatefulWidget {
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
-typedef OnPickImageCallback = void Function();
-
 class _SettingsPageState extends State<SettingsPage> {
 
   final companyNameTextController = TextEditingController();
@@ -93,6 +81,8 @@ class _SettingsPageState extends State<SettingsPage> {
   final boardKanbanURLTextController = TextEditingController();
   final testingURLTextController = TextEditingController();
   final messagingURLTextController = TextEditingController();
+
+  final logoUrlController = TextEditingController();
 
   final continuousQualityTokenTextController = TextEditingController();
   final continuousQualityUsernameTextController = TextEditingController();
@@ -114,9 +104,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final messagingUsernameTextController = TextEditingController();
   final messagingPasswordTextController = TextEditingController();
 
-  final ImagePicker _picker = ImagePicker();
-  dynamic _pickImageError;
-  late XFile _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
+  String logoUrl = '';
 
   Color primaryColor = const Color(0xFF071330);
   Color primaryVariantColor = const Color(0xFF071330);
@@ -145,7 +133,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   int selectedRadio = 1;
   int touchedIndex = -1;
-  String? _retrieveDataError;
   List<ChartCard> charts = [];
 
   void updatePrimaryColor(Color color) {
@@ -162,191 +149,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void updateSecondaryVariantColor(Color color) {
     setState(() => secondaryVariantColor = color);
-  }
-
-  Future<File> getImageFileFromAssets(String path) async {
-    final byteData = await rootBundle.load('assets/$path');
-    final file = File('${(await getTemporaryDirectory()).path}/$path');
-    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-    return file;
-  }
-
-  String retrieveFilePathFromAsset(String assetPath) {
-    File file = File('');
-    getImageFileFromAssets(assetPath).then((file) => file.path);
-    setState(() {
-      _image = XFile(File(file.path).path);
-    });
-    return file.path;
-  }
-
-  Text? _getRetrieveErrorWidget() {
-    if (_retrieveDataError != null) {
-      final Text result = Text(_retrieveDataError!);
-      _retrieveDataError = null;
-      return result;
-    }
-    return null;
-  }
-
-  Future<void> retrieveLostData() async {
-    final LostDataResponse response = await _picker.retrieveLostData();
-    if (response.isEmpty) {
-      return;
-    }
-    if (response.file != null) {
-      setState(() {
-        _image = response.file!;
-      });
-    } else {
-      _retrieveDataError = response.exception!.code;
-    }
-  }
-
-  Widget _previewImages() {
-    final Text? retrieveError = _getRetrieveErrorWidget();
-    if (retrieveError != null) {
-      return retrieveError;
-    }
-
-    if (_image.path != '' || _image.path.isNotEmpty) {
-      return Semantics(
-        label: 'image_picker_example_picked_image',
-        child: kIsWeb
-            ? Image.network(
-          _image.path,
-          alignment: Alignment.center,
-          width: 100,
-          height: 100,
-        )
-            : Image.file(
-          File(_image.path),
-          alignment: Alignment.center,
-          width: 100,
-          height: 100,
-        ),
-      );
-    } else if (_pickImageError != null) {
-      return Text(
-        'Pick image error: $_pickImageError',
-        textAlign: TextAlign.center,
-      );
-    } else {
-      return  Image.asset(
-        'assets/qalenium_logo_white_background.png',
-        semanticLabel: 'Company\'s logo',
-        width: 100,
-        height: 100,
-      );
-    }
-  }
-
-  String getStringFromAssetImage(String assetPath) {
-    String imageString = "";
-    getImageFileFromAssets(assetPath).then((file) =>
-    imageString = file.readAsStringSync()
-    );
-    return imageString;
-  }
-
-  Future<void> _onImageButtonPressed({BuildContext? context}) async {
-
-    await _displayPickImageDialog(context!, () async {
-      try {
-        final XFile? pickedFile = await _picker.pickImage(
-          source: selectedRadio == 1 ? ImageSource.gallery : ImageSource.camera,
-          maxWidth: 100,
-          maxHeight: 100,
-          imageQuality: 100,
-        );
-        setState(() {
-          _image = pickedFile!;
-        });
-      } catch (e) {
-        setState(() {
-          _pickImageError = e;
-        });
-      }
-    });
-  }
-
-  Future<void> _displayPickImageDialog(
-      BuildContext context, OnPickImageCallback onPick) async {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          bool isRadioSelected = false;
-          return AlertDialog(
-            title: const Text('Select source'),
-            content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    RadioListTile(
-                        title: const Text('Gallery'),
-                        subtitle: const Text('Select logo from gallery'),
-                        secondary: const Icon(Icons.photo),
-                        selected: isRadioSelected,
-                        toggleable: true,
-                        value: 1,
-                        groupValue: selectedRadio,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) {
-                              selectedRadio = value as int;
-                            }
-
-                            if(isRadioSelected == false) {
-                              isRadioSelected = true;
-                            } else {
-                              isRadioSelected = false;
-                            }
-                          });
-                        }
-                    ),
-                    RadioListTile(
-                        title: const Text('Camera'),
-                        subtitle: const Text('Set your logo as a picture'),
-                        secondary: const Icon(Icons.camera_alt),
-                        selected: isRadioSelected,
-                        toggleable: true,
-                        value: 2,
-                        groupValue: selectedRadio,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value != null) {
-                              selectedRadio = value as int;
-                            }
-
-                            if(isRadioSelected == false) {
-                              isRadioSelected = true;
-                            } else {
-                              isRadioSelected = false;
-                            }
-                          });
-                        }
-                    ),
-                  ],
-                );
-              },
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Cancel'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                  child: const Text('Select'),
-                  onPressed: () {
-                    onPick();
-                    Navigator.of(context).pop();
-                  }),
-            ],
-          );
-        });
   }
 
   BarChartData mainBarData() {
@@ -551,10 +353,11 @@ class _SettingsPageState extends State<SettingsPage> {
       chartType: "line",
     );
 
+    logoUrl = widget.company.logo;
+
     charts = [pieChartCard, horizontalBarChartCard, verticalBarChartCard,
       lineChartCard];
 
-    _image = XFile(File(retrieveFilePathFromAsset('qalenium_logo_white_background.png')).path);
     isLoginUsingGithubEnabled = widget.company.loginGit;
     isLoginUsingAppleEnabled = widget.company.loginApple;
     isLoginUsingEmailEnabled = widget.company.loginEmail;
@@ -643,6 +446,18 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  String? get _errorText {
+    // at any time, we can get the text from _controller.value.text
+    final text = logoUrlController.value.text;
+    // Note: you can do your own custom validation here
+    // Move this logic this outside the widget for more testable code
+    if (!isURL(text)) {
+      return "URL is invalid";
+    }
+    // return null if the text is valid
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -659,46 +474,18 @@ class _SettingsPageState extends State<SettingsPage> {
               child: ListView(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
-                        ? FutureBuilder<void>(
-                      //future: retrieveLostData(),
-                      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.none:
-                            return Image.asset(
-                              'assets/qalenium_logo_white_background.png',
-                              semanticLabel: 'Company\'s logo',
-                              width: 100,
-                              height: 100,
-                            );
-                          case ConnectionState.waiting:
-                            return Image.asset(
-                              'assets/qalenium_logo_white_background.png',
-                              semanticLabel: 'Company\'s logo',
-                              width: 100,
-                              height: 100,
-                            );
-                          case ConnectionState.done:
-                            return _previewImages();
-                          default:
-                            if (snapshot.hasError) {
-                              return Text(
-                                'Pick image/video error: ${snapshot.error}}',
-                                textAlign: TextAlign.center,
-                              );
-                            } else {
-                              return Image.asset(
-                                'assets/qalenium_logo_white_background.png',
-                                semanticLabel: 'Company\'s logo',
-                                width: 100,
-                                height: 100,
-                              );
-                            }
-                        }
-                      },
-                    )
-                        : _previewImages(),
+                      padding: const EdgeInsets.all(0),
+                      child: FutureBuilder<void>(
+                        //future: retrieveLostData(),
+                        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                          return Image.network(
+                            logoUrl,
+                            semanticLabel: 'Company\'s logo',
+                            width: 100,
+                            height: 100,
+                          );
+                        },
+                      )
                   ),
                   ElevatedButton.icon(
                       label: const Text('Change logo'),
@@ -706,7 +493,46 @@ class _SettingsPageState extends State<SettingsPage> {
                         Icons.edit,
                       ),
                       onPressed: () async {
-                        _onImageButtonPressed(context: context);
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text("Choose logo from URL"),
+                              content: TextField(
+                                controller: logoUrlController,
+                                decoration: InputDecoration(
+                                    labelText: "Paste logo URL here",
+                                    errorText: _errorText
+                                ),
+                                onChanged: (text) => setState(() => {}),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () => {
+                                    setState(() {
+                                      if (!isURL(logoUrlController.text,
+                                          requireTld: false)) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return const AlertDialog(
+                                                content: Text('Invalid URL'),
+                                              );
+                                            });
+                                      } else {
+                                        logoUrl = logoUrlController.text;
+                                        Navigator.pop(context, 'Use this URL');
+                                      }
+                                    })
+                                  },
+                                  child: const Text('Use this URL'),
+                                ),
+                              ],
+                            )
+                        );
                       }
                   ),
                   TextFormField(
@@ -2246,11 +2072,6 @@ class _SettingsPageState extends State<SettingsPage> {
                           }
                         }
 
-                        ByteData bytes = await rootBundle.load
-                          ('assets/qalenium_logo_white_background.png');
-                        var buffer = bytes.buffer;
-                        var base64Logo = base64.encode(Uint8List.view(buffer));
-
                         final companyUpdateResponse = await http
                             .put(Uri.parse('https://qalenium-api.herokuapp'
                             '.com/company/updateCompany/' + widget.company
@@ -2260,8 +2081,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                           body: jsonEncode(<String, String>{
                             'name': companyNameTextController.text,
-                            'logo': _image.path == '' ? base64Logo :
-                            base64Encode(File(_image.path).readAsBytesSync()),
+                            'logo': logoUrl,
                             'loginGit': isLoginUsingGithubEnabled.toString(),
                             'loginApple': isLoginUsingAppleEnabled.toString(),
                             'loginFacebook': isLoginUsingFacebookEnabled.toString(),
