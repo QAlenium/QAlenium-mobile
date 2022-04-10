@@ -74,9 +74,8 @@ class _SignInPageState extends State<SignInPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Image.memory(
-                      const Base64Decoder().convert
-                        (widget.company.logo),
+                    Image.network(
+                      widget.company.logo,
                       semanticLabel: 'Company\'s logo',
                       alignment: Alignment.center,
                     ),

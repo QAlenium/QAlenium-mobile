@@ -51,7 +51,7 @@ class CompaniesPage extends StatefulWidget {
 class _CompaniesPageState extends State<CompaniesPage> {
 
   List<Company> companies = [];
-  List<Company> _foundUsers = [];
+  List<Company> _foundCompanies = [];
 
   void _goToRegisterCompanyPage() {
     Navigator.push(
@@ -80,7 +80,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
         List<dynamic> listCompanies = jsonDecode(response.body);
         companies = listCompanies.map((company) => Company.companyFromJson
           (company)).toList();
-        _foundUsers = companies;
+        _foundCompanies = companies;
       });
     }
   }
@@ -96,7 +96,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
           .toList();
     }
     setState(() {
-      _foundUsers = results;
+      _foundCompanies = results;
     });
   }
 
@@ -128,7 +128,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
-          itemCount: _foundUsers.length,
+          itemCount: _foundCompanies.length,
           itemBuilder: (context, index) {
             return GestureDetector(
                 onTap: () => {
@@ -170,19 +170,18 @@ class _CompaniesPageState extends State<CompaniesPage> {
                           Expanded(
                             child: Padding(
                                 padding: const EdgeInsets.all(20),
-                                child: _foundUsers[index].logo == '' ?
+                                child: _foundCompanies[index].logo == '' ?
                                 Image.asset(
                                   'assets/qalenium_logo.png',
                                   alignment: Alignment.center,
                                 ) :
-                                Image.memory(
-                                  const Base64Decoder().convert
-                                    (_foundUsers[index].logo),
+                                Image.network(
+                                  _foundCompanies[index].logo,
                                   alignment: Alignment.center,
                                 )
                             ),
                           ),
-                          Text(_foundUsers[index].name),
+                          Text(_foundCompanies[index].name),
                         ],
                       ),
                     )
