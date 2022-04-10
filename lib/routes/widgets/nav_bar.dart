@@ -53,22 +53,22 @@ class NavBar extends StatelessWidget {
                 )
             ),
           ),
-          ListTile(
+          if (company.continuousQualityUrl.isNotEmpty) ListTile(
             leading: const Icon(Icons.search),
             title: const Text('Continuous Quality'),
             onTap: () => Navigator.pop(context),
           ),
-          ListTile(
+          if (company.ciCdUrl.isNotEmpty) ListTile(
             leading: const Icon(Icons.code),
             title: const Text('CI/CD'),
             onTap: () => Navigator.pop(context),
           ),
-          ListTile(
+          if (company.testingUrl.isNotEmpty) ListTile(
             leading: const Icon(Icons.bug_report),
             title: const Text('Testing'),
             onTap: () => Navigator.pop(context),
           ),
-          ListTile(
+          if (company.messagingUrl.isNotEmpty) ListTile(
             leading: const Icon(Icons.message),
             title: const Text('Messaging'),
             onTap: () => Navigator.pop(context),
