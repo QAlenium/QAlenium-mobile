@@ -477,7 +477,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Form(
             child: Padding(
               padding: const EdgeInsets.all(30.0),
-              child: ListView(
+              child: widget.user.isAdmin ? ListView(
                 children: <Widget>[
                   Padding(
                       padding: const EdgeInsets.all(0),
@@ -2223,7 +2223,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       }
                   ),
                 ],
-              ),
+              ) : const Text("You are not Admin"),
             )),
       ),
     );
