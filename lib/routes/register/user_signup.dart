@@ -58,9 +58,14 @@ class _UserSignupPageState extends State<UserSignupPage> {
   final passwordTextController = TextEditingController();
   final rePasswordTextController = TextEditingController();
 
+  bool _passwordVisible = true;
+  bool _rePasswordVisible = true;
+
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
+    _rePasswordVisible = false;
   }
 
   @override
@@ -88,16 +93,42 @@ class _UserSignupPageState extends State<UserSignupPage> {
                     ),
                     TextFormField(
                       controller: passwordTextController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          hintText: 'password'
+                      obscureText: !_passwordVisible,
+                      decoration: InputDecoration(
+                        hintText: 'password',
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            onPressed: () => {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              })
+                            }
+                        ),
                       ),
                     ),
                     TextFormField(
                       controller: rePasswordTextController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          hintText: 'repeat password'
+                      obscureText: !_rePasswordVisible,
+                      decoration: InputDecoration(
+                        hintText: 'repeat password',
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              _rePasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            onPressed: () => {
+                              setState(() {
+                                _rePasswordVisible = !_rePasswordVisible;
+                              })
+                            }
+                        ),
                       ),
                     ),
                     ElevatedButton(
