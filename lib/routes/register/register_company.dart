@@ -115,6 +115,9 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
   int selectedRadio = 1;
 
+  bool _passwordVisible = true;
+  bool _rePasswordVisible = true;
+
   String? get _errorText {
     // at any time, we can get the text from _controller.value.text
     final text = logoUrlController.value.text;
@@ -147,6 +150,8 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   void initState() {
     super.initState();
     logoUrl = "https://lh3.googleusercontent.com/pw/AM-JKLX-2JHTvagTET6YezCneToKODvilv0YP4FpRsSzo0W05I-RWU4q2wZ6Xx7HCQ3d1_zha_nDkEyz3NiwNPpfXHWgSsBnkJYJ8vwX_C0FvCiwB2JCgZF7OeAqo3XPtV7dJ2GwkoOvKTHeAkGCTqCR5msz1w=s1500-no?authuser=0";
+    _passwordVisible = false;
+    _rePasswordVisible = false;
   }
 
   @override
@@ -333,16 +338,42 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                             ),
                             TextFormField(
                               controller: passwordTextController,
-                              obscureText: true,
-                              decoration: const InputDecoration(
-                                  hintText: 'password'
+                              obscureText: !_passwordVisible,
+                              decoration: InputDecoration(
+                                hintText: 'password',
+                                suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _passwordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    onPressed: () => {
+                                      setState(() {
+                                        _passwordVisible = !_passwordVisible;
+                                      })
+                                    }
+                                ),
                               ),
                             ),
                             TextFormField(
                               controller: rePasswordTextController,
-                              obscureText: true,
-                              decoration: const InputDecoration(
-                                  hintText: 'repeat password'
+                              obscureText: !_rePasswordVisible,
+                              decoration: InputDecoration(
+                                hintText: 'repeat password',
+                                suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _rePasswordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    onPressed: () => {
+                                      setState(() {
+                                        _rePasswordVisible = !_rePasswordVisible;
+                                      })
+                                    }
+                                ),
                               ),
                             ),
                           ],
@@ -498,9 +529,22 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                                         TextFormField(
                                           controller: continuousQualityPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
-                                            hintText: 'Continuous '
-                                                'Quality Password',
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
+                                            hintText: 'Quality Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -565,8 +609,22 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                                         TextFormField(
                                           controller: ciCdPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
                                             hintText: 'CI/CD Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -632,8 +690,22 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                                         TextFormField(
                                           controller: boardKanbanPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
                                             hintText: 'Board/Kanban Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -701,8 +773,22 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                                           controller:
                                           testingPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
                                             hintText: 'Testing Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -770,8 +856,22 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                                           controller:
                                           messagingPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
                                             hintText: 'Messaging Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],

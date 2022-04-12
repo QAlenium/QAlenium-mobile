@@ -329,9 +329,15 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  bool _passwordVisible = true;
+  bool _rePasswordVisible = true;
+
   @override
   void initState() {
     super.initState();
+
+    _passwordVisible = false;
+    _rePasswordVisible = false;
 
     var pieChartCard = ChartCard(title: "Pie Chart",
       isSelected: false,
@@ -634,16 +640,42 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                             TextFormField(
                               controller: passwordTextController,
-                              obscureText: true,
-                              decoration: const InputDecoration(
-                                  hintText: 'password'
+                              obscureText: !_passwordVisible,
+                              decoration: InputDecoration(
+                                hintText: 'password',
+                                suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _passwordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    onPressed: () => {
+                                      setState(() {
+                                        _passwordVisible = !_passwordVisible;
+                                      })
+                                    }
+                                ),
                               ),
                             ),
                             TextFormField(
                               controller: rePasswordTextController,
-                              obscureText: true,
-                              decoration: const InputDecoration(
-                                  hintText: 'repeat password'
+                              obscureText: !_rePasswordVisible,
+                              decoration: InputDecoration(
+                                hintText: 'repeat password',
+                                suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _rePasswordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    onPressed: () => {
+                                      setState(() {
+                                        _rePasswordVisible = !_rePasswordVisible;
+                                      })
+                                    }
+                                ),
                               ),
                             ),
                           ],
@@ -799,9 +831,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                         TextFormField(
                                           controller: continuousQualityPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
-                                            hintText: 'Continuous '
-                                                'Quality Password',
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
+                                            hintText: 'Quality password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -866,8 +911,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                         TextFormField(
                                           controller: ciCdPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
                                             hintText: 'CI/CD Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -933,8 +992,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                         TextFormField(
                                           controller: boardKanbanPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
                                             hintText: 'Board/Kanban Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -1002,8 +1075,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                           controller:
                                           testingPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
                                             hintText: 'Testing Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -1071,8 +1158,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                           controller:
                                           messagingPasswordTextController,
                                           textAlign: TextAlign.center,
-                                          decoration: const InputDecoration(
+                                          obscureText: !_passwordVisible,
+                                          decoration: InputDecoration(
                                             hintText: 'Messaging Password',
+                                            suffixIcon: IconButton(
+                                                icon: Icon(
+                                                  _passwordVisible
+                                                      ? Icons.visibility
+                                                      : Icons.visibility_off,
+                                                  color: Theme.of(context).primaryColor,
+                                                ),
+                                                onPressed: () => {
+                                                  setState(() {
+                                                    _passwordVisible = !_passwordVisible;
+                                                  })
+                                                }
+                                            ),
                                           ),
                                         ),
                                       ],

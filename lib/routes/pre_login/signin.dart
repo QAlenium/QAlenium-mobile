@@ -57,9 +57,12 @@ class _SignInPageState extends State<SignInPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
 
+  bool _passwordVisible = true;
+
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
   }
 
   @override
@@ -90,11 +93,23 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                           ),
                           TextFormField(
-                            obscureText: true,
-                            controller: passwordTextController,
+                            obscureText: !_passwordVisible,
                             textAlign: TextAlign.center,
-                            decoration: const InputDecoration(
-                              hintText: 'Password',
+                            decoration: InputDecoration(
+                              hintText: 'password',
+                              suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _passwordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  onPressed: () => {
+                                    setState(() {
+                                      _passwordVisible = !_passwordVisible;
+                                    })
+                                  }
+                              ),
                             ),
                           ),
                           SizedBox(
