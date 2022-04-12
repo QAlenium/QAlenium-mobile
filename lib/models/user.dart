@@ -4,13 +4,15 @@ class User {
   final String deviceId;
   final String email;
   final String auth;
+  final bool isAdmin;
 
   const User({
     required this.userId,
     required this.companyId,
     required this.deviceId,
     required this.email,
-    required this.auth
+    required this.auth,
+    required this.isAdmin
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -19,7 +21,8 @@ class User {
         companyId: int.parse(json['companyId']),
         deviceId: json['deviceId'],
         email: json['email'],
-        auth: json['auth']
+        auth: json['auth'],
+        isAdmin: json['isAdmin']
     );
   }
 }

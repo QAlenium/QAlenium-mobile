@@ -4,6 +4,7 @@ import 'package:qalenium_mobile/models/company.dart';
 import 'package:qalenium_mobile/models/user.dart';
 import 'package:qalenium_mobile/routes/drawer_menu/favorites.dart';
 import 'package:qalenium_mobile/routes/drawer_menu/settings.dart';
+import 'package:qalenium_mobile/routes/pre_login/companies.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({Key? key, required this.flexSchemeData, required this.user,
@@ -102,9 +103,15 @@ class NavBar extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            title: const Text('Exit'),
-            leading: const Icon(Icons.exit_to_app),
-            onTap: () => Navigator.pop(context),
+              title: const Text('Exit'),
+              leading: const Icon(Icons.exit_to_app),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CompaniesRoute(
+                          flexSchemeData: flexSchemeData)
+                  )
+              ),
           ),
         ],
       ),

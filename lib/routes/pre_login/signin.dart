@@ -93,6 +93,7 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                           ),
                           TextFormField(
+                            controller: passwordTextController,
                             obscureText: !_passwordVisible,
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
