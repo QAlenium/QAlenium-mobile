@@ -47,7 +47,6 @@ class SettingsRoute extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       home: SettingsPage(
-        title: 'Company Settings Page',
         flexSchemeData: flexSchemeData,
         user: user,
         company: company,
@@ -57,13 +56,11 @@ class SettingsRoute extends StatelessWidget {
 }
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key, required this.title, required this
-      .flexSchemeData, required this.user, required this.company}) : super(key:
+  const SettingsPage({Key? key, required this.flexSchemeData, required this.user, required this.company}) : super(key:
   key);
 
   final Company company;
   final User user;
-  final String title;
   final FlexSchemeData flexSchemeData;
 
   @override

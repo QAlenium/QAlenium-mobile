@@ -36,17 +36,19 @@ class SignInRoute extends StatelessWidget {
         secondaryVariant: flexSchemeData.dark.secondaryVariant,
       ),
       themeMode: ThemeMode.system,
-      home: SignInPage(title: 'SignIn Page', company: company, flexSchemeData: flexSchemeData),
+      home: SignInPage(
+          company: company,
+          flexSchemeData: flexSchemeData
+      ),
     );
   }
 }
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key, required this.title, required this.company,
+  const SignInPage({Key? key, required this.company,
     required this.flexSchemeData}) : super(key: key);
 
   final Company company;
-  final String title;
   final FlexSchemeData flexSchemeData;
 
   @override

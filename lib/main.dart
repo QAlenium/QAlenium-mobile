@@ -89,7 +89,7 @@ class SplashRoute extends StatelessWidget {
             secondaryVariant: _myFlexScheme.dark.secondaryVariant,
           ),
           themeMode: ThemeMode.system,
-          home: SplashPage(title: 'Splash Page', flexSchemeData: _myFlexScheme),
+          home: SplashPage(flexSchemeData: _myFlexScheme),
         );
       },
     );
@@ -97,10 +97,8 @@ class SplashRoute extends StatelessWidget {
 }
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key, required this.title,
-    required this.flexSchemeData}) : super(key: key);
+  const SplashPage({Key? key, required this.flexSchemeData}) : super(key: key);
 
-  final String title;
   final FlexSchemeData flexSchemeData;
 
   @override

@@ -34,18 +34,18 @@ class UserSignupRoute extends StatelessWidget {
         secondaryVariant: flexSchemeData.dark.secondaryVariant,
       ),
       themeMode: ThemeMode.system,
-      home: UserSignupPage(title: 'Register User Page', company: company,
-          flexSchemeData: flexSchemeData),
+      home: UserSignupPage(
+          company: company,
+          flexSchemeData: flexSchemeData
+      ),
     );
   }
 }
 
 class UserSignupPage extends StatefulWidget {
-  const UserSignupPage({Key? key, required this.title, required this.company,
-    required this.flexSchemeData}) : super(key: key);
+  const UserSignupPage({Key? key, required this.company, required this.flexSchemeData}) : super(key: key);
 
   final Company company;
-  final String title;
   final FlexSchemeData flexSchemeData;
 
   @override

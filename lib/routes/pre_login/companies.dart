@@ -32,16 +32,14 @@ class CompaniesRoute extends StatelessWidget {
         secondaryVariant: flexSchemeData.dark.secondaryVariant,
       ),
       themeMode: ThemeMode.system,
-      home: CompaniesPage(title: 'QAlenium Companies Page', flexSchemeData: flexSchemeData),
+      home: CompaniesPage(flexSchemeData: flexSchemeData),
     );
   }
 }
 
 class CompaniesPage extends StatefulWidget {
-  const CompaniesPage({Key? key, required this.title, required this.flexSchemeData}) :
-        super(key: key);
+  const CompaniesPage({Key? key, required this.flexSchemeData}) : super(key: key);
 
-  final String title;
   final FlexSchemeData flexSchemeData;
 
   @override

@@ -34,7 +34,6 @@ class FavoritesRoute extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       home: HomePage(
-          title: 'Favorite Page',
           flexSchemeData: flexSchemeData,
           user: user,
           company: company
@@ -44,11 +43,9 @@ class FavoritesRoute extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title, required this
-      .flexSchemeData, required this.user, required this.company}) : super(key:
+  const HomePage({Key? key, required this.flexSchemeData, required this.user, required this.company}) : super(key:
   key);
 
-  final String title;
   final FlexSchemeData flexSchemeData;
   final User user;
   final Company company;
