@@ -1,8 +1,8 @@
 ![banner](https://raw.github.com/kaapiel/Raw-content/master/flutter_app-banner.png)
 
-![Quality Gate Status](https://sonarcloud.io/dashboard?id=QAlenium_flutter_app)
+![Quality Gate Status](https://sonarcloud.io/project/overview?id=QAlenium_QAlenium-mobile)
 
-![CircleCI](https://img.shields.io/circleci/build/github/QAlenium/flutter_app/main)
+![CircleCI](https://app.circleci.com/pipelines/github/QAlenium/QAlenium-mobile)
 
 # QAlenium Flutter app
 #### See also our [API](https://github.com/QAlenium/QAlenium-api) and [Wearable](https://github.com/QAlenium/QAlenium-wearable) repositories
@@ -10,7 +10,7 @@ A powerful & easy to use flutter (Android and iOS) app to manage your software i
 
 #### To access our PaaS (Server) access [this link](https://heroku.com/dashboard?id=QAlenium)
 #### To access SonarCloud data use [this link](https://sonarcloud.io/project/overview?id=QAlenium_QAlenium-mobile)
-#### To access the pipeline and CI data use [this link](https://circleci.com/gh/QAlenium/QAlenium_flutter_app)
+#### To access the pipeline and CI data use [this link](https://app.circleci.com/pipelines/github/QAlenium/QAlenium-mobile)
 #### To access the non-functional test data use [this link](https://blazemeter.com/QAlenium_flutter_app)
 #### To access the functional test data use [this link](https://cypress.com/)
 #### To access the project board use [this link](https://github.com/orgs/QAlenium/projects/3)
