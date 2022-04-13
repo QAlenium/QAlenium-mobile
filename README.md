@@ -9,7 +9,7 @@
 A powerful & easy to use flutter (Android and iOS) app to manage your software integrations!
 
 #### To access our PaaS (Server) access [this link](https://heroku.com/dashboard?id=QAlenium)
-#### To access SonarCloud data use [this link](https://sonarcloud.io/dashboard?id=QAlenium_flutter_app)
+#### To access SonarCloud data use [this link](https://sonarcloud.io/project/overview?id=QAlenium_QAlenium-mobile)
 #### To access the pipeline and CI data use [this link](https://circleci.com/gh/QAlenium/QAlenium_flutter_app)
 #### To access the non-functional test data use [this link](https://blazemeter.com/QAlenium_flutter_app)
 #### To access the functional test data use [this link](https://cypress.com/)
