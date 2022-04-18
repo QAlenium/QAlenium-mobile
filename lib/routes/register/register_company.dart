@@ -87,7 +87,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   final messagingUsernameTextController = TextEditingController();
   final messagingPasswordTextController = TextEditingController();
 
-  late String logoUrl = "https://lh3.googleusercontent.com/pw/AM-JKLX-2JHTvagTET6YezCneToKODvilv0YP4FpRsSzo0W05I-RWU4q2wZ6Xx7HCQ3d1_zha_nDkEyz3NiwNPpfXHWgSsBnkJYJ8vwX_C0FvCiwB2JCgZF7OeAqo3XPtV7dJ2GwkoOvKTHeAkGCTqCR5msz1w=s1500-no?authuser=0";
+  late String logoUrl = "https://raw.githubusercontent.com/QAlenium/QAlenium-mobile/main/assets/qalenium_logo_white_background.png";
 
   Color primaryColor = const Color(0xFF071330);
   Color primaryVariantColor = const Color(0xFF071330);
@@ -149,7 +149,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   @override
   void initState() {
     super.initState();
-    logoUrl = "https://lh3.googleusercontent.com/pw/AM-JKLX-2JHTvagTET6YezCneToKODvilv0YP4FpRsSzo0W05I-RWU4q2wZ6Xx7HCQ3d1_zha_nDkEyz3NiwNPpfXHWgSsBnkJYJ8vwX_C0FvCiwB2JCgZF7OeAqo3XPtV7dJ2GwkoOvKTHeAkGCTqCR5msz1w=s1500-no?authuser=0";
+    logoUrl = "https://raw.githubusercontent.com/QAlenium/QAlenium-mobile/main/assets/qalenium_logo_white_background.png";
     _passwordVisible = false;
     _rePasswordVisible = false;
   }

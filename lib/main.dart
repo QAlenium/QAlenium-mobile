@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons_maker/utils.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:qalenium_mobile/routes/pre_login/companies.dart';
 import 'package:qalenium_mobile/routes/pre_login/signin.dart';
@@ -25,12 +25,19 @@ void callCompaniesApi() async {
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   String deviceUuid = "";
 
-  if (Platform.isAndroid) {
+  if (defaultTargetPlatform == TargetPlatform.android)  {
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     deviceUuid = androidInfo.androidId!;
-  } else if (Platform.isIOS) {
+  }
+  else if (defaultTargetPlatform == TargetPlatform.iOS) {
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
     deviceUuid = iosInfo.identifierForVendor!;
+  }
+  else if (defaultTargetPlatform == TargetPlatform.linux || defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.windows) {
+    deviceUuid = "0000-0000-0000-0000";
+  }
+  else {
+    deviceUuid = "0000-0000-0000-0000";
   }
 
   response = await http.get(Uri.parse('https://qalenium-api.herokuapp'
@@ -58,16 +65,16 @@ class SplashRoute extends StatelessWidget {
       name: 'Midnight blue',
       description: 'Midnight blue theme, custom definition of all colors',
       light: FlexSchemeColor(
-          primary: Color(int.parse(companies.isEmpty ? 'FF010B2C' : companies[0].primaryLightColor , radix: 16)),
-          primaryVariant: Color(int.parse(companies.isEmpty ? 'FF151C2C' : companies[0].primaryLightColor , radix: 16)),
-          secondary: Color(int.parse(companies.isEmpty ? 'FFFFCA24' : companies[0].primaryLightColor , radix: 16)),
-          secondaryVariant: Color(int.parse(companies.isEmpty ? 'FF846C2A' : companies[0].primaryLightColor , radix: 16)),
+        primary: Color(int.parse(companies.isEmpty ? 'FF010B2C' : companies[0].primaryLightColor , radix: 16)),
+        primaryVariant: Color(int.parse(companies.isEmpty ? 'FF151C2C' : companies[0].primaryLightColor , radix: 16)),
+        secondary: Color(int.parse(companies.isEmpty ? 'FFFFCA24' : companies[0].primaryLightColor , radix: 16)),
+        secondaryVariant: Color(int.parse(companies.isEmpty ? 'FF846C2A' : companies[0].primaryLightColor , radix: 16)),
       ),
       dark: FlexSchemeColor(
-          primary: Color(int.parse(companies.isEmpty ? 'FF010B2C' : companies[0].primaryLightColor , radix: 16)),
-          primaryVariant: Color(int.parse(companies.isEmpty ? 'FF151C2C' : companies[0].primaryLightColor , radix: 16)),
-          secondary: Color(int.parse(companies.isEmpty ? 'FFFFCA24' : companies[0].primaryLightColor , radix: 16)),
-          secondaryVariant: Color(int.parse(companies.isEmpty ? 'FF846C2A' : companies[0].primaryLightColor , radix: 16)),
+        primary: Color(int.parse(companies.isEmpty ? 'FF010B2C' : companies[0].primaryLightColor , radix: 16)),
+        primaryVariant: Color(int.parse(companies.isEmpty ? 'FF151C2C' : companies[0].primaryLightColor , radix: 16)),
+        secondary: Color(int.parse(companies.isEmpty ? 'FFFFCA24' : companies[0].primaryLightColor , radix: 16)),
+        secondaryVariant: Color(int.parse(companies.isEmpty ? 'FF846C2A' : companies[0].primaryLightColor , radix: 16)),
       ),
     );
 
