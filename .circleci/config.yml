@@ -29,14 +29,14 @@ jobs:
           post-emulator-launch-assemble-command: 'flutter build apk --debug'
           restore-gradle-cache-find-args: ./android -name 'build.gradle'
       - android/run-tests:
-          test-command: flutter drive --target=test_driver/app.dart
+          test-command: flutter drive --target=lib/main.dart
       - store_artifacts:
           path: ozzie
 
   integration_test_ios:
     macos:
       xcode: 13.3.0
-    resource_class: small
+    resource_class: medium
     steps:
       - checkout
       - macos/preboot-simulator:
@@ -47,7 +47,7 @@ jobs:
       - flutter-orb/install_ios_pod
       - run:
           name: Integration Test
-          command: flutter drive --target=test_driver/app.dart
+          command: flutter drive --target=lib/main.dart
       - store_artifacts:
           path: ozzie
 
