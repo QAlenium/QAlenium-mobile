@@ -87,7 +87,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   final messagingUsernameTextController = TextEditingController();
   final messagingPasswordTextController = TextEditingController();
 
-  late String logoUrl = "https://raw.githubusercontent.com/QAlenium/QAlenium-mobile/main/assets/qalenium_logo_white_background.png";
+  late String logoUrl = "https://raw.githubusercontent.com/QAlenium/QAlenium-mobile/main/assets/appium.jpg";
 
   Color primaryColor = const Color(0xFF071330);
   Color primaryVariantColor = const Color(0xFF071330);
@@ -149,7 +149,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   @override
   void initState() {
     super.initState();
-    logoUrl = "https://raw.githubusercontent.com/QAlenium/QAlenium-mobile/main/assets/qalenium_logo_white_background.png";
+    logoUrl = "https://raw.githubusercontent.com/QAlenium/QAlenium-mobile/main/assets/appium.jpg";
     _passwordVisible = false;
     _rePasswordVisible = false;
   }
