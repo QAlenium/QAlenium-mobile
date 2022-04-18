@@ -13,7 +13,7 @@ jobs:
   integration_test_android:
     executor:
       name: android/android-machine
-      resource-class: small
+      resource-class: medium
       tag: 2022.03.1
     steps:
       - checkout
