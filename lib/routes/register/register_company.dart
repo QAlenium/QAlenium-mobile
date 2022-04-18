@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -14,6 +14,9 @@ import 'package:http/http.dart' as http;
 import 'package:validators/validators.dart';
 
 import '../../models/company.dart';
+import 'package:uuid/uuid.dart';
+import 'dart:math';
+
 
 class RegisterCompanyRoute extends StatelessWidget {
   const RegisterCompanyRoute({Key? key, required this.flexSchemeData}) : super(key: key);
@@ -1116,12 +1119,14 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
                           String deviceUuid = "";
 
-                          if (Platform.isAndroid) {
+                          if (defaultTargetPlatform == TargetPlatform.android) {
                             AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
                             deviceUuid = androidInfo.androidId!;
-                          } else if (Platform.isIOS) {
+                          } else if (defaultTargetPlatform == TargetPlatform.iOS) {
                             IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
                             deviceUuid = iosInfo.identifierForVendor!;
+                          } else {
+                            deviceUuid = const Uuid().v5(Uuid.NAMESPACE_OID, Random().toString());
                           }
 
                           if (companyQueryByNameResponse.statusCode == 200) {

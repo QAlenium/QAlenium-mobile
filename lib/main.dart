@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -11,6 +10,8 @@ import 'package:qalenium_mobile/routes/pre_login/signin.dart';
 
 import 'models/company.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
+import 'dart:math';
 
 late http.Response response;
 List<Company> companies = [];
@@ -34,10 +35,10 @@ void callCompaniesApi() async {
     deviceUuid = iosInfo.identifierForVendor!;
   }
   else if (defaultTargetPlatform == TargetPlatform.linux || defaultTargetPlatform == TargetPlatform.macOS || defaultTargetPlatform == TargetPlatform.windows) {
-    deviceUuid = "0000-0000-0000-0000";
+    deviceUuid = const Uuid().v5(Uuid.NAMESPACE_OID, Random().toString());
   }
   else {
-    deviceUuid = "0000-0000-0000-0000";
+    deviceUuid = const Uuid().v5(Uuid.NAMESPACE_OID, Random().toString());
   }
 
   response = await http.get(Uri.parse('https://qalenium-api.herokuapp'
