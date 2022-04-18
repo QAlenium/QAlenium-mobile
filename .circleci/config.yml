@@ -4,27 +4,57 @@ version: 2.1
 # Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
-  android: circleci/android@1.0.3
-  browser-tools: circleci/browser-tools@1.2.5
-  flutter: circleci/flutter@1.0
+  android: circleci/android@2.0.0
+  flutter-orb: circleci/flutter@1.0.1
+  ruby: circleci/ruby@1.6.0
+  macos: circleci/macos@2.1.0
 
 jobs:
-  distribute:
-    macos:
-      xcode: 12.5.1
+  integration_test_android:
+    executor:
+      name: android/android-machine
+      resource-class: small
+      tag: 2022.03.1
     steps:
-      - flutter/install_sdk_and_pub
-      - flutter/install_android_gradle
-      - flutter/install_android_gem
-      - flutter/install_ios_pod
-      - flutter/install_ios_gem
+      - checkout
+      - flutter-orb/install_sdk_and_pub:
+          cache-version: machine
+          flutter_version: 2.10.3
+      - android/create-avd:
+          avd-name: flutter
+          install: true
+          system-image: system-images;android-29;default;x86
+      - android/start-emulator:
+          avd-name: flutter
+          post-emulator-launch-assemble-command: 'flutter build apk --debug'
+          restore-gradle-cache-find-args: ./android -name 'build.gradle'
+      - android/run-tests:
+          test-command: flutter drive --target=test_driver/app.dart
+      - store_artifacts:
+          path: ozzie
+
+  integration_test_ios:
+    macos:
+      xcode: 13.3.0
+    resource_class: small
+    steps:
+      - checkout
+      - macos/preboot-simulator:
+          device: iPhone 13
+          version: "15.4"
+      - flutter-orb/install_sdk_and_pub:
+          flutter_version: 2.10.3
+      - flutter-orb/install_ios_pod
       - run:
-          command: flutter --version
-          working_directory: ios
+          name: Integration Test
+          command: flutter drive --target=test_driver/app.dart
+      - store_artifacts:
+          path: ozzie
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  distribute: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  test_android_and_ios:
     jobs:
-      - distribute
+      - integration_test_android
+      - integration_test_ios
