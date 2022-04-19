@@ -23,7 +23,7 @@ jobs:
           name: flutter build apk
           command: flutter -v build apk --debug
       - store_artifacts:
-          path: ~/project/artifacts
+          path: ~/project/build/app/outputs/flutter-apk
 workflows:
   deploy_android:
     jobs:
