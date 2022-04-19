@@ -5,11 +5,12 @@ orbs:
   flutter-orb: circleci/flutter@1.0.1
 
 jobs:
-  integration_test_android:
+  android_deploy_apk:
     executor:
       name: android/android-machine
       resource-class: medium
       tag: 2022.03.1
+    working_directory: ~/project
     steps:
       - checkout
       - flutter-orb/install_sdk_and_pub:
@@ -20,9 +21,10 @@ jobs:
           command: flutter clean
       - run:
           name: flutter build apk
-          command: flutter -v build apk
-
+          command: flutter -v build apk --debug
+      - store_artifacts:
+          path: ~/project/artifacts
 workflows:
-  test_android_and_ios:
+  deploy_android:
     jobs:
-      - integration_test_android
+      - android_deploy_apk
