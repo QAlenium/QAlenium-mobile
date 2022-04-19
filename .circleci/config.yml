@@ -4,8 +4,8 @@ orbs:
   android: circleci/android@2.0.0
   flutter-orb: circleci/flutter@1.0.1
 
-jobs:
-  android_deploy_apk:
+build:
+  android_build_apk:
     executor:
       name: android/android-machine
       resource-class: medium
@@ -24,7 +24,3 @@ jobs:
           command: flutter -v build apk --debug
       - store_artifacts:
           path: ~/project/build/app/outputs/flutter-apk
-workflows:
-  deploy_android:
-    jobs:
-      - android_deploy_apk
