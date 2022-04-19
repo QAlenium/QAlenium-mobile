@@ -4,8 +4,8 @@ orbs:
   android: circleci/android@2.0.0
   flutter-orb: circleci/flutter@1.0.1
 
-build:
-  android_build_apk:
+jobs:
+  build:
     executor:
       name: android/android-machine
       resource-class: medium
