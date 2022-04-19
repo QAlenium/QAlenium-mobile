@@ -29,7 +29,7 @@ jobs:
           post-emulator-launch-assemble-command: 'flutter build apk --debug'
           restore-gradle-cache-find-args: ./android -name 'build.gradle'
       - android/run-tests:
-          test-command: flutter drive --target=lib/main.dart
+          test-command: flutter test integration_test
       - store_artifacts:
           path: ozzie
 
@@ -47,7 +47,7 @@ jobs:
       - flutter-orb/install_ios_pod
       - run:
           name: Integration Test
-          command: flutter drive --target=lib/main.dart
+          command: flutter test integration_test
       - store_artifacts:
           path: ozzie
 

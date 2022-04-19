@@ -89,6 +89,8 @@ flutter_native_splash:
 
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
 
