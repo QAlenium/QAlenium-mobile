@@ -21,6 +21,6 @@ jobs:
           command: flutter clean
       - run:
           name: flutter build apk
-          command: flutter -v build apk
+          command: flutter -v build apk --debug
       - store_artifacts:
           path: ~/project/build/app/outputs/flutter-apk
