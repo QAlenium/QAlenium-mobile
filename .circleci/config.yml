@@ -24,3 +24,12 @@ jobs:
           command: flutter -v build apk --debug
       - store_artifacts:
           path: ~/project/build/app/outputs/flutter-apk
+
+workflows:
+  build_and_test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - main
