@@ -3,9 +3,12 @@ version: 2.1
 orbs:
   android: circleci/android@2.0.0
   flutter-orb: circleci/flutter@1.0.1
+  # Refer to this link to setup Slack channels: https://github.com/CircleCI-Public/slack-orb/wiki/Setup
+  # Setup slack app also:  https://github.com/CircleCI-Public/slack-orb/issues/207#issuecomment-731219733
+  slack: circleci/slack@4.9.3
 
 jobs:
-  build:
+  build_and_test:
     executor:
       name: android/android-machine
       resource-class: medium
@@ -24,11 +27,14 @@ jobs:
           command: flutter -v build apk --debug
       - store_artifacts:
           path: ~/project/build/app/outputs/flutter-apk
+      - slack/notify:
+          event: always
+          template: basic_success_1
 
 workflows:
   build_and_test:
     jobs:
-      - build:
+      - build_and_test:
           filters:
             branches:
               only:
