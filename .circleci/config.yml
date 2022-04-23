@@ -17,6 +17,7 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
+      # Note that sonar scan is triggered ONLY if automatic analysis is turned OFF
       - sonarcloud/scan
       - flutter-orb/install_sdk_and_pub:
           cache-version: machine
